@@ -8,7 +8,7 @@ with open('morse.txt', 'r') as fp:
         text_to_morse[key] = value
 print(text_to_morse)
 
-text_to_morse.setdefault('')
+#text_to_morse.setdefault('')
 
 def convertToMorse(s: str) -> str:
     out_string: str = ''
@@ -17,7 +17,7 @@ def convertToMorse(s: str) -> str:
         if i == ' ':
             out_string += ' / '
         else:
-            out_string += text_to_morse.get(i)
+            out_string += text_to_morse.get(i, '')
     return out_string
 
 def main(args):
