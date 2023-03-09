@@ -18,8 +18,7 @@ def convertToMorse(s: str) -> str:
             out_string += '/ '
         else:
             y = text_to_morse.get(i.upper())
-            if y != None:
-                out_string += y + ' '
+            out_string += y + ' ' if y != None else ''
     return out_string
 
 def main(args):
