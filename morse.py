@@ -7,16 +7,19 @@ with open('morse.txt', 'r') as fp:
         key, value = line.split()
         text_to_morse[key] = value
 
-text_to_morse.setdefault('')
+#text_to_morse.setdefault('')
 
 def convertToMorse(s: str) -> str:
     out_string: str = ''
     s.strip()
     for i in s:
         if i == ' ':
+            print(len(out_string[-2:]))
+            if out_string[-2:] == '  ':
+                continue
             out_string += '/ '
         else:
-            out_string += text_to_morse.get(i.upper(), '')+' '
+            out_string += text_to_morse.get(i.upper(), '')
     return out_string
 
 def main(args):
