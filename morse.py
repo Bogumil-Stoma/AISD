@@ -15,9 +15,11 @@ def convertToMorse(s: str) -> str:
     s.strip()
     for i in s:
         if i == ' ':
-            out_string += ' / '
+            out_string += '/ '
         else:
-            out_string += text_to_morse.get(i, '')
+            y = text_to_morse.get(i.upper())
+            if y != None:
+                out_string += y + ' '
     return out_string
 
 def main(args):
