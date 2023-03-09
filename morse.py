@@ -6,8 +6,15 @@ with open('morse.txt', 'r') as fp:
         text_to_morse[key] = value
 print(text_to_morse)
 
+text_to_morse.setdefault('')
 
-def convertToMorse(s):
-    out_string = ''
+def convertToMorse(s: str) -> str:
+    out_string: str = ''
+    s.strip()
     for i in s:
-        pass
+        if i == ' ':
+            out_string.append(' / ')
+        else:
+            out_string.append(text_to_morse.get(i))
+    return out_string
+
