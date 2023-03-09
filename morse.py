@@ -6,7 +6,6 @@ with open('morse.txt', 'r') as fp:
     for line in fp:
         key, value = line.split()
         text_to_morse[key] = value
-print(text_to_morse)
 
 text_to_morse.setdefault('')
 
@@ -15,15 +14,21 @@ def convertToMorse(s: str) -> str:
     s.strip()
     for i in s:
         if i == ' ':
-            out_string.append(' / ')
+            out_string += '/ '
         else:
-            out_string.append(text_to_morse.get(i))
+            out_string += text_to_morse.get(i.upper(), '')+' '
     return out_string
 
 def main(args):
     with open(args.translate_file, 'r') as fp:
         pass
         #TODO add translate function
+        result = ''
+        for line in fp:
+            result += convertToMorse(line)
+            result += '\n'
+        print(result)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
