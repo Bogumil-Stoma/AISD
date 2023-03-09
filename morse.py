@@ -14,14 +14,13 @@ def convertToMorse(s: str) -> str:
     s.strip()
     for i in s:
         if i == ' ':
-            print(len(out_string[-2:]))
-            if out_string[-2:] == '  ':
+            if out_string[-2:] == '/ ':
                 continue
             out_string += '/ '
         else:
             y = text_to_morse.get(i.upper())
             out_string += y + ' ' if y != None else ''
-    return out_string
+    return out_string.strip()
 
 def main(args):
     with open(args.translate_file, 'r') as fp:
