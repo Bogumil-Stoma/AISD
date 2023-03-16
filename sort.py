@@ -1,9 +1,13 @@
-def bubble_sort(tab):
+import copy
+
+def bubble_sort(tab_to_copy):
+    tab = copy.deepcopy(tab_to_copy)
     n = len(tab)
     for i in range(n-1):
         for j in range(n-1):
-            if tab[j+1] > tab[j]:
+            if tab[j+1] < tab[j]:
                 tab[j+1], tab[j] = tab[j], tab[j+1]
+    return tab
 
 def merge_sort(tab):
     if len(tab) <= 1:
