@@ -60,4 +60,21 @@ def quick_sort(a, l, r) -> list:
 
 
 def selection_sort(a: list) -> list:
-    pass
+    for x in range(len(a)):
+        min_index = x
+        for j in range(x, len(a)):
+            if a[j] < a[min_index]:
+                min_index = j
+        a[x], a[min_index] = a[min_index], a[x]
+
+data = [1, 7, 4, 1, 10, 9, -2]
+print("Unsorted Array")
+print(data)
+ 
+size = len(data)
+ 
+selection_sort(data)
+ 
+
+print('Sorted Array in Ascending Order:')
+print(data)
