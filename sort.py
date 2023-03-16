@@ -45,7 +45,7 @@ def quick_sort(a, l, r) -> list:
 
         quick_sort(a=a, l=l, r=pi-1)
         quick_sort(a=a, l=pi+1, r=r)
-
+    return a
 # data = [1, 7, 4, 1, 10, 9, -2]
 # print("Unsorted Array")
 # print(data)
@@ -66,15 +66,16 @@ def selection_sort(a: list) -> list:
             if a[j] < a[min_index]:
                 min_index = j
         a[x], a[min_index] = a[min_index], a[x]
+    return a
 
-data = [1, 7, 4, 1, 10, 9, -2]
-print("Unsorted Array")
-print(data)
+# data = [1, 7, 4, 1, 10, 9, -2]
+# print("Unsorted Array")
+# print(data)
  
-size = len(data)
+# size = len(data)
  
-selection_sort(data)
+# selection_sort(data)
  
 
-print('Sorted Array in Ascending Order:')
-print(data)
+# print('Sorted Array in Ascending Order:')
+# print(data)
