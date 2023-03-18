@@ -32,7 +32,9 @@ def merge(left, right):
     result+=right[j:]
     return result
 
-def quick_sort(a, l, r) -> list:
+def quick_sort(a, l=0, r=None) -> list:
+    if r == None:
+        r = len(a)-1
     if l < r:
         pi = a[r]
         i = l-1
