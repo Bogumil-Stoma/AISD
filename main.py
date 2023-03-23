@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import sort_lib
 import time
 import gc
+import sys
+
+sys.setrecursionlimit(20000)
+NUM_OF_MEASUREMENTS = 20
 
 text = []
 with open('pan-tadeusz.txt', 'r', encoding='utf-8') as fp:
@@ -22,15 +26,25 @@ def test_sorting(func, text, min, max, increments):
     test_t = []
     test_n = []
     for i in range(min, max+1, increments):
-        test_t.append(measure_time(func, i, text))
+        if ((func.__name__ == "bubble_sort" or func.__name__ == "selection_sort") and i > 4000):
+            #limit for bubble and selection sort so it doesnt take so much time
+            continue
+
+        del_time = 0
+
+        for j in range(NUM_OF_MEASUREMENTS):
+            del_time += measure_time(func, i, text)
+        del_time = del_time/NUM_OF_MEASUREMENTS
+        test_t.append(del_time)
         test_n.append(i)
+        print(f'num of iteration {i}')
     return test_n, test_t
 
 def main():
     func_list = [sort_lib.bubble_sort, sort_lib.quick_sort, sort_lib.merge_sort, sort_lib.selection_sort]
     func_out_list = []
     for x in func_list:
-        func_out_list.append((x, test_sorting(x, text, 1000, 100000, 1000)))
+        func_out_list.append((x, test_sorting(x, text, 1000, 40000, 1000)))
 
     for i in range(len(func_out_list)):
         fname = func_out_list[i][0].__name__
