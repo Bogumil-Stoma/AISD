@@ -48,6 +48,7 @@ def main():
     func_out_list.append((sort_lib.selection_sort, test_sorting(sort_lib.selection_sort, text, 1000, 6000, 1000)))
     func_out_list.append((sort_lib.quick_sort, test_sorting(sort_lib.quick_sort, text, 1000, 20000, 1000)))
     func_out_list.append((sort_lib.merge_sort, test_sorting(sort_lib.merge_sort, text, 1000, 20000, 1000)))
+    func_out_list.append((sort_lib.quick_sort_random, test_sorting(sort_lib.quick_sort_random, text, 1000, 20000, 1000)))
 
     # for x in func_list:         
     #     func_out_list.append((x, test_sorting(x, text, 1000, 20000, 1000)))
@@ -56,7 +57,7 @@ def main():
         fname = func_out_list[i][0].__name__
         data = func_out_list[i][1]
         plt.figure(10)
-        plt.plot(*data, label = fname)
+        plt.plot(*data, label = fname, linestyle='dashed' if fname=="quick_sort_random" else 'solid')
         plt.figure(i)
         plt.ylabel('time[s]')
         plt.xlabel('num of words')
