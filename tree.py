@@ -6,10 +6,10 @@ class bstNode:
         self.l_child = None
         self.r_child = None
     
-    def setRightChild(self, val):
+    def setRightChild(self, val) -> None:
         self.r_child = bstNode(val)
 
-    def setLeftChild(self, val):
+    def setLeftChild(self, val) -> None:
         self.l_child = bstNode(val)
     
     def getRightChild(self):
@@ -31,4 +31,13 @@ class BST:
         pass
 
     def print(self):
+        pass
+
+class avlNode(bstNode):
+    def __init__(self, val) -> None:
+        bstNode.__init__(self, val)
+        self.height = 0
+
+class AVLTree:
+    def __init__(self) -> None:
         pass
