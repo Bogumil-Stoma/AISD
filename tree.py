@@ -21,6 +21,7 @@ class bstNode:
 class BST:
     def __init__(self, root):
         self.root:bstNode = root
+        self.nodes = dict()
     def insert(self, val):
         node = self.root
         last_node = node
@@ -37,10 +38,42 @@ class BST:
             last_node.setLeftChild(val)
 
     def find(self, val):
-        pass
+        node = self.root
+        while (node != None):
+            if node.val == val:
+                return BST(node)
+            elif val > node.val:
+                node = node.getRightChild()
+            else:
+                node = node.getLeftChild()
+
+        return False
 
     def remove(self, val):
         pass
 
-    def print(self):
-        pass
+    def tree_dict(self, node: bstNode = 0, level=0, index=0, rights=0):
+        if node == 0:
+            node = self.root
+        if node == None:
+            return
+        if node.getLeftChild() == None and node.getRightChild() == None:
+            self.nodes[level] = self.nodes.setdefault(level, ["[]"]*(2**level))
+            self.nodes[level][index] = str(node.val)
+            return
+        else:
+            self.nodes[level] = self.nodes.setdefault(level, ["[]"]*(2**level))
+            self.nodes[level][index] = str(node.val)
+            if rights>0:
+                l_index = index + 2**rights - 1
+            else:
+                l_index = index
+            self.tree_dict(node.getLeftChild(), level+1, l_index, rights)
+            self.tree_dict(node.getRightChild(), level+1, index+2**rights, 2**rights)
+
+    def __str__(self):
+        self.tree_dict()
+        suma = ''
+        for key in self.nodes:
+            suma += '   '.join(self.nodes[key]).center(8*len(self.nodes))+'\n'
+        return suma
