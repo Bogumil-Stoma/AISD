@@ -33,11 +33,18 @@ class BST:
     def print(self):
         pass
 
+    def _print_string(root, pos):
+        pass
+
+    def height(self):
+        depth = 1
+        
+
 class avlNode(bstNode):
     def __init__(self, val) -> None:
         bstNode.__init__(self, val)
         self.height = 0
 
-class AVLTree:
+class AVLTree(BST):
     def __init__(self) -> None:
         pass
