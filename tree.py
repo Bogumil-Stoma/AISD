@@ -19,47 +19,40 @@ class bstNode:
         return self.l_child
     
     def __str__(self) -> str:
-        return 
+        return str(self.val)
     
     def print(self):
         lines, *_ = self._print_helper()
         for line in lines:
             print(line)
 
-    def _print_helper(self):
+    def _print_helper(self) -> str:
+        val_str = str(self.val)
+        val_len = len(val_str)
         if self.l_child is None and self.r_child is None:
-            line = str(self.val)
-            width = len(line)
-            height = 1
-            middle = width//2
-            return [line], width, height, middle
-        if self.r_child is None:
-            lines, prev_width, height, middle = self.l_child._print_helper()
-            s = str(self.val)
-            width = len(s)
-            line_1 = (height+1)*' ' + (prev_width-height-1)*'_'+s
-            line_2 = middle*' '+'/'+(n-middle-1+width)*' '
-            lines_shifted = [line + width*' 'for line in lines]
-            return [line_1, line_2]+lines_shifted,prev_width+width,height+2, prev_width+width//2 
+            return [val_str], val_len, 1, val_len//2
         if self.l_child is None:
-            lines, prev_width, height, middle = self.r_child._print_helper()
-            s = str(self.val)
-            width = len(s)
-            line_1 = s+middle*'_'+(prev_width-middle)*' '
-            line_2 = (width+middle)*' '+'\\'+(prev_width-middle-1)*' '
-            lines_shifted = [width*' '+line for line in lines]
-            return [line_1, line_2]+lines_shifted,prev_width+width,height+2, width//2 
-        left, l_prev_width, l_height, l_middle = self.l_child._print_helper()
-        right, r_prev_width, r_heigh, r_middle = self.r_child._print_helper()
-        s = str(self.val)
-        width = len(s)
-        line_1 = (l_middle + 1) * ' ' + (n - l_middle - 1) * '_' + s + r_middle * '_' + (m - r_middle) * ' '
-        line_2 = l_middle * ' ' + '/' + (n - l_middle - 1 + width + r_middle) * ' ' + '\\' + (m - r_middle - 1) * ' '
-        if p < q:
-            left += [n*' ']*(q-p)
-        elif p > q:
-            right += [n*' ']*(p-q)
-        return [line_1, line_2]+[a+width*' '+b for a, b in zip(left, right)], n+m+width, max(p, q)+2, n+width//2
+            lines, width, height, middle = self.r_child._print_helper()
+            line_1 = val_str+middle*'_'+(width-middle)*' ' 
+            line_2 = (val_len+middle)*' '+'\\'+(width-middle-1)*' '
+            lines = [val_len*' ' + line for line in lines]
+            return [line_1, line_2]+lines, width+val_len, height+2, val_len//2
+        if self.r_child is None:
+            lines, width, height, middle = self.l_child._print_helper()
+            line_1 = (middle+1)*' '+(width-middle-1)*'_'+val_str
+            line_2 = middle*' '+'/'+(width-middle-1+val_len)*' '
+            lines = [line+val_len*' 'for line in lines]
+            return [line_1, line_2]+lines, width+val_len, height+2, width+val_len//2
+        l_lines, l_width, l_height, l_middle = self.l_child._print_helper()
+        r_lines, r_width, r_height, r_middle = self.r_child._print_helper()
+        line_1 = (l_middle+1)*' '+(l_width - l_middle - 1)*'_'+val_str+r_middle*'_'+(r_width-r_middle)*' '
+        line_2 = l_middle*' '+'/'+(l_width-l_middle-1+val_len+r_middle)*' '+'\\'+(r_width-r_middle-1)*' '
+        if l_height < r_height:
+            l_lines += [l_width*' ']*(r_height-l_height)
+        elif l_height > r_height:
+            r_lines += [r_width*' ']*(l_height-r_height)
+        return [line_1, line_2]+[l+val_len*' '+r for l, r in zip(l_lines, r_lines)],\
+        val_len+r_width+l_width, max(l_height, r_height)+2, l_width+val_len//2
 
 
 class BST:
@@ -115,30 +108,32 @@ class BST:
             self.tree_dict(node.getLeftChild(), level+1, l_index, rights)
             self.tree_dict(node.getRightChild(), level+1, index+2**rights, 2**rights)
 
-    def __str__(self):
-        self.tree_dict()
-        suma = ''
-        for key in self.nodes:
-            suma += '   '.join(self.nodes[key]).center(8*len(self.nodes))+'\n'
-        return suma
+    # def __str__(self):
+    #     self.tree_dict()
+    #     suma = ''
+    #     for key in self.nodes:
+    #         suma += '   '.join(self.nodes[key]).center(8*len(self.nodes))+'\n'
+    #     return suma
     
-    # def __str__(self) -> str:
-    #     self.root.print()
-
-
-    def _print_string(root, pos):
-        pass
+    def __str__(self) -> str:
+        lines, *_ = self.root._print_helper()
+        out_str = ""
+        for line in lines:
+            out_str += (line + "\n")
+        return out_str
+        
         
 
 class avlNode(bstNode):
     def __init__(self, val) -> None:
         bstNode.__init__(self, val)
         self.height = 0
-    def height(self, node: 'avlNode') -> int:
+
+    def height(node) -> int:
         if node is None:
             return 0
-        lheight = self.height(node.getLeftChild())
-        rheigh = self.height(node.getRightChild())
+        lheight = avlNode.height(node.getLeftChild())
+        rheigh = avlNode.height(node.getRightChild())
 
         return lheight+1 if lheight > rheigh else rheigh+1
 

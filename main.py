@@ -17,9 +17,9 @@ def main():
 
     #print()
     #print(DRZEWO)
-    print(DRZEWO)
+    #print(DRZEWO)
     print("\n ")
-    DRZEWO.root.print()
+    print(DRZEWO)
     # print(DRZEWO.find(20))
     # print()
     # print(DRZEWO.find(30))
