@@ -203,7 +203,7 @@ class avlTree(BST):
          self.root = self._insertHelper(self.root, val)
 
     def _insertHelper(self, node:avlNode, val:int) -> avlNode:	
-		# Step 1 - Perform normal BST
+        
         if not node:
             return avlNode(val)
         elif val < node.getVal():
