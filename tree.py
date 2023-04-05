@@ -7,20 +7,30 @@ class bstNode:
         self.r_child = None
 
     def setRightChild(self, val) -> None:
-        self.r_child = bstNode(val)
+        if val == None:
+            self.r_child = None
+        elif type(val) == bstNode:
+            self.r_child = val
+        else:
+            self.r_child = bstNode(val)
 
     def setLeftChild(self, val) -> None:
-        self.l_child = bstNode(val)
+        if val == None:
+            self.r_left = None
+        elif type(val) == bstNode:
+            self.l_child = val
+        else:
+            self.l_child = bstNode(val)
 
     def getRightChild(self):
         return self.r_child
 
     def getLeftChild(self):
         return self.l_child
-    
+
     def __str__(self) -> str:
         return str(self.val)
-    
+
     def print(self):
         lines, *_ = self._print_helper()
         for line in lines:
@@ -33,7 +43,7 @@ class bstNode:
             return [val_str], val_len, 1, val_len//2
         if self.l_child is None:
             lines, width, height, middle = self.r_child._print_helper()
-            line_1 = val_str+middle*'_'+(width-middle)*' ' 
+            line_1 = val_str+middle*'_'+(width-middle)*' '
             line_2 = (val_len+middle)*' '+'\\'+(width-middle-1)*' '
             lines = [val_len*' ' + line for line in lines]
             return [line_1, line_2]+lines, width+val_len, height+2, val_len//2
@@ -86,8 +96,31 @@ class BST:
 
         return False
 
-    def remove(self, val):
-        pass
+    def remove(self, val, node=None):
+        if self.root == None:
+            return None
+        if node == None:
+            node = self.root
+        if val > node.val:
+            node.setRightChild(self.remove(val, node.getRightChild()))
+        elif val < node.val:
+            node.setLeftChild(self.remove(val, node.getLeftChild()))
+        else:
+            if node.getRightChild() == None:
+                return node.getLeftChild()
+            elif node.getLeftChild() == None:
+                return node.getRightChild()
+            min_node = node.getRightChild()
+            while min_node.getLeftChild():
+                min_node = min_node.getLeftChild()
+            min_val = min_node.val
+            min_node = None
+            self.remove(min_val)
+            node.val = min_val
+            node.setRightChild(None)
+            return
+        return node
+
 
     def tree_dict(self, node: bstNode = 0, level=0, index=0, rights=0):
         if node == 0:
@@ -114,15 +147,15 @@ class BST:
     #     for key in self.nodes:
     #         suma += '   '.join(self.nodes[key]).center(8*len(self.nodes))+'\n'
     #     return suma
-    
+
     def __str__(self) -> str:
         lines, *_ = self.root._print_helper()
         out_str = ""
         for line in lines:
             out_str += (line + "\n")
         return out_str
-        
-        
+
+
 
 class avlNode(bstNode):
     def __init__(self, val) -> None:
