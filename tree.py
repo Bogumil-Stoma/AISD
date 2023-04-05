@@ -90,11 +90,14 @@ class BST:
 
         return False
 
-    def remove(self, val, node=None):
-        if self.root == None:
-            return None
-        if node == None:
+    def remove(self, val, node='no'):
+        '''
+        ##if self.root == None:
+          ##  return None
+        if node == 'no':
             node = self.root
+        if node == None:
+            return None
         if val > node.val:
             node.setRightChild(self.remove(val, node.getRightChild()))
         elif val < node.val:
@@ -104,16 +107,106 @@ class BST:
                 return node.getLeftChild()
             elif node.getLeftChild() == None:
                 return node.getRightChild()
+            if node.getRightChild().val == val:
+                node.setRightChild(self.remove(val, node.getLeftChild()))
+                return node
+            elif node.getLeftChild().val == val:
+                node.setLeftChild(self.remove(val, node.getLeftChild()))
+                return node
             min_node = node.getRightChild()
             while min_node.getLeftChild():
                 min_node = min_node.getLeftChild()
             min_val = min_node.val
-            min_node = None
             self.remove(min_val)
+
             node.val = min_val
-            node.setRightChild(None)
-            return
+            return node
         return node
+        '''
+        curr = self.root
+        prev = None
+
+        # First check if the key is
+        # actually present in the BST.
+        # the variable prev points to the
+        # parent of the key to be deleted
+        while(curr != None and curr.val != val):
+            prev = curr
+            if curr.val < val:
+                curr = curr.getRightChild()
+            else:
+                curr = curr.getLeftChild()
+
+        if curr == None:
+           # print("Key % d not found in\
+            #the provided BST." % val)
+            return self.root
+
+        # Check if the node to be
+        # deleted has atmost one child
+        if curr.getLeftChild() == None or\
+                curr.getRightChild() == None:
+
+            # newCurr will replace
+            # the node to be deleted.
+            newCurr = None
+
+            # if the left child does not exist.
+            if curr.getLeftChild() == None:
+                newCurr = curr.getRightChild()
+            else:
+                newCurr = curr.getLeftChild()
+
+            # check if the node to
+            # be deleted is the root.
+            if prev == None:
+                return newCurr
+
+            # Check if the node to be
+            # deleted is prev's left or
+            # right child and then
+            # replace this with newCurr
+            if curr == prev.getLeftChild():
+                prev.setLeftChild(newCurr)
+            else:
+                prev.setRightChild(newCurr)
+
+            curr = None
+
+        # node to be deleted
+        # has two children.
+        else:
+            p = None
+            temp = None
+
+            # Compute the inorder
+            # successor of curr.
+            temp = curr.getRightChild()
+            while(temp.getLeftChild() != None):
+                p = temp
+                temp = temp.getLeftChild()
+
+            # check if the parent of the
+            # inorder successor is the root or not.
+            # if it isn't, then make the left
+            # child of its parent equal to the
+            # inorder successor's right child.
+            if p != None:
+                p.setLeftChild(temp.getRightChild())
+
+            else:
+
+                # if the inorder successor was
+                # the root, then make the right child
+                # of the node to be deleted equal
+                # to the right child of the inorder
+                # successor.
+                curr.setRightChild(temp.getRightChild())
+
+            curr.val = temp.val
+            temp = None
+
+        return self.root
 
 
     def tree_dict(self, node: bstNode = 0, level=0, index=0, rights=0):
@@ -148,6 +241,7 @@ class BST:
         for line in lines:
             out_str += (line + "\n")
         return out_str
+
 
 
 
