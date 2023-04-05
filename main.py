@@ -39,14 +39,24 @@ def loop_remove(i, tree):
     for j in range(NUM_OF_NUMBERS*i):
         tree.remove(numbers[j])
 
+def plot_it(name, times1, times2):
+    #plt.figure(10)
+    plt.plot(*data, label = name)
+    plt.figure(i)
+    plt.ylabel('time[s]')
+    plt.xlabel('num of words')
+    plt.plot(*data)
+    plt.suptitle(name)
+    plt.savefig(name+'.png')
+
 def main():
     for i in range(1, 11):
         binary_tree = tree.BST(tree.bstNode(random.randint(1, 30000)))
         insert_times.append(measure_time(loop_insert, i, binary_tree))
-        remove_times.append(measure_time(loop_remove, i, binary_tree))
-        find_times.append(measure_time(loop_find, i, binary_tree))
+        #remove_times.append(measure_time(loop_remove, i, binary_tree))
+        #find_times.append(measure_time(loop_find, i, binary_tree))
 
-
+    plot_it('insert', [insert_times])
 
     print(insert_times)
     print(remove_times)
