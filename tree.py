@@ -6,45 +6,48 @@ class bstNode:
         self.l_child = None
         self.r_child = None
 
-    def setRightChild(self, val) -> None:
-        self.r_child = bstNode(val)
+    def setRightChild(self, node:'bstNode') -> None:
+        self.r_child = node
 
-    def setLeftChild(self, val) -> None:
-        self.l_child = bstNode(val)
+    def setLeftChild(self, node:'bstNode') -> None:
+        self.l_child = node
 
     def getRightChild(self):
         return self.r_child
 
     def getLeftChild(self):
         return self.l_child
+
+    def getVal(self) -> int:
+        return self.val
     
     def __str__(self) -> str:
         return str(self.val)
     
     def print(self):
-        lines, *_ = self._print_helper()
+        lines, *_ = self._printHelper()
         for line in lines:
             print(line)
 
-    def _print_helper(self) -> str:
+    def _printHelper(self) -> str:
         val_str = str(self.val)
         val_len = len(val_str)
         if self.l_child is None and self.r_child is None:
             return [val_str], val_len, 1, val_len//2
         if self.l_child is None:
-            lines, width, height, middle = self.r_child._print_helper()
+            lines, width, height, middle = self.r_child._printHelper()
             line_1 = val_str+middle*'_'+(width-middle)*' ' 
             line_2 = (val_len+middle)*' '+'\\'+(width-middle-1)*' '
             lines = [val_len*' ' + line for line in lines]
             return [line_1, line_2]+lines, width+val_len, height+2, val_len//2
         if self.r_child is None:
-            lines, width, height, middle = self.l_child._print_helper()
+            lines, width, height, middle = self.l_child._printHelper()
             line_1 = (middle+1)*' '+(width-middle-1)*'_'+val_str
             line_2 = middle*' '+'/'+(width-middle-1+val_len)*' '
             lines = [line+val_len*' 'for line in lines]
             return [line_1, line_2]+lines, width+val_len, height+2, width+val_len//2
-        l_lines, l_width, l_height, l_middle = self.l_child._print_helper()
-        r_lines, r_width, r_height, r_middle = self.r_child._print_helper()
+        l_lines, l_width, l_height, l_middle = self.l_child._printHelper()
+        r_lines, r_width, r_height, r_middle = self.r_child._printHelper()
         line_1 = (l_middle+1)*' '+(l_width - l_middle - 1)*'_'+val_str+r_middle*'_'+(r_width-r_middle)*' '
         line_2 = l_middle*' '+'/'+(l_width-l_middle-1+val_len+r_middle)*' '+'\\'+(r_width-r_middle-1)*' '
         if l_height < r_height:
@@ -59,27 +62,28 @@ class BST:
     def __init__(self, root):
         self.root:bstNode = root
         self.nodes = dict()
+    
     def insert(self, val):
         node = self.root
         last_node = node
         while node != None:
-            if val >= node.val:
+            if val >= node.getVal():
                 last_node = node
                 node = node.getRightChild()
             else:
                 last_node = node
                 node = node.getLeftChild()
-        if val >= last_node.val:
-            last_node.setRightChild(val)
+        if val >= last_node.getVal():
+            last_node.setRightChild(bstNode(val))
         else:
-            last_node.setLeftChild(val)
+            last_node.setLeftChild(bstNode(val))
 
     def find(self, val):
         node = self.root
         while (node != None):
-            if node.val == val:
+            if node.getVal() == val:
                 return BST(node)
-            elif val > node.val:
+            elif val > node.getVal():
                 node = node.getRightChild()
             else:
                 node = node.getLeftChild()
@@ -116,7 +120,7 @@ class BST:
     #     return suma
     
     def __str__(self) -> str:
-        lines, *_ = self.root._print_helper()
+        lines, *_ = self.root._printHelper()
         out_str = ""
         for line in lines:
             out_str += (line + "\n")
@@ -128,18 +132,104 @@ class avlNode(bstNode):
     def __init__(self, val) -> None:
         bstNode.__init__(self, val)
         self.height = 0
+    
+    def setRightChild(self, node:'avlNode') -> None:
+        self.r_child = node
 
-    def height(node) -> int:
+    def setLeftChild(self, node:'avlNode') -> None:
+        self.l_child = node
+
+    def determineHeight(node: 'avlNode') -> int:
         if node is None:
             return 0
-        lheight = avlNode.height(node.getLeftChild())
-        rheigh = avlNode.height(node.getRightChild())
+        lheight = avlNode.determineHeight(node.getLeftChild())
+        rheigh = avlNode.determineHeight(node.getRightChild())
 
         return lheight+1 if lheight > rheigh else rheigh+1
 
-class AVLTree(BST):
-    def __init__(self) -> None:
-        BST.__init__(self)
+    def getHeight(self) -> int:
+        self.height = avlNode.determineHeight(self)
+        return self.height
+
+class avlTree(BST):
+    def __init__(self, root: avlNode, treshold=1) -> None:
+        self.root:avlNode = root
+        self.nodes = dict()
+        self.treshold = treshold
+    
+    def getBalanceFactor(self) -> int:
+        if self.root is None:
+            return 0
+        return avlNode.determineHeight(self.root.getLeftChild())-avlNode.determineHeight(self.root.getRightChild())
+    
+    def leftRotate(self, node:avlNode):
+        node_right:avlNode = node.getRightChild()
+        node_right_child:avlNode = node_right.getLeftChild()
+
+        node_right.setLeftChild(node)
+        node.setRightChild(node_right_child)
+
+        node.getHeight()
+        node_right.getHeight()
+
+        return node_right
+
+    def rightRotate(self, node:avlNode):
+        node_left:avlNode = node.getLeftChild()
+        node_left_child:avlNode = node_left.getRightChild()
+
+        node_left.setRightChild(node)
+        node.setLeftChild(node_left_child)
+
+        node.getHeight()
+        node_left.getHeight()
+
+        return node_left
+
+
+    def insert(self, val):
+        # super().insert(val)
+        node = self.root
+        last_node = node
+        while node != None:
+            if val >= node.getVal():
+                last_node = node
+                node = node.getRightChild()
+            else:
+                last_node = node
+                node = node.getLeftChild()
+        if val >= last_node.getVal():
+            last_node.setRightChild(avlNode(val))
+        else:
+            last_node.setLeftChild(avlNode(val))
+        
+        self.root.getHeight()
+        balance = self.getBalanceFactor()
+
+        if balance > self.treshold and val < self.root.getLeftChild().getVal():
+            self.root =  self.rightRotate(self.root)
+ 
+        # Case 2 - Right Right
+        if balance < -self.treshold and val > self.root.getRightChild().getVal():
+            self.root = self.leftRotate(self.root)
+ 
+        # Case 3 - Left Right
+        if balance > self.treshold and val > self.root.getLeftChild().getVal():
+            self.root.setLeftChild(self.leftRotate(self.root.getLeftChild()))
+            self.root = self.rightRotate(self.root)
+ 
+        # Case 4 - Right Left
+        if balance < -self.treshold and val < self.root.getRightChild().getVal():
+            self.root.setRightChild(self.rightRotate(self.root.getRightChild()))
+            self.root = self.leftRotate(self.root)
+ 
+        
+ 
+        
+
+
+
+    
 
 
 
