@@ -66,7 +66,7 @@ class BST:
     def insert(self, val):
         node = self.root
         last_node = node
-        while node != None:
+        while node is not None:
             if val >= node.getVal():
                 last_node = node
                 node = node.getRightChild()
@@ -80,7 +80,7 @@ class BST:
 
     def find(self, val):
         node = self.root
-        while (node != None):
+        while (node is not None):
             if node.getVal() == val:
                 return BST(node)
             elif val > node.getVal():
@@ -154,19 +154,21 @@ class BST:
 class avlNode(bstNode):
     def __init__(self, val) -> None:
         bstNode.__init__(self, val)
-        self.height = 0
 
-    def determineHeight(node: 'avlNode') -> int:
+    def getHeight(node: 'avlNode') -> int:
         if node is None:
             return 0
-        lheight = avlNode.determineHeight(node.getLeftChild())
-        rheigh = avlNode.determineHeight(node.getRightChild())
+        l_height = avlNode.getHeight(node.getLeftChild()) + 1
+        r_height = avlNode.getHeight(node.getRightChild()) + 1
+        return l_height if l_height > r_height else r_height 
+        
+        
 
-        return lheight+1 if lheight > rheigh else rheigh+1
-
-    def getHeight(self) -> int:
-        self.height = avlNode.determineHeight(self)
-        return self.height
+    def replace(self, node:'avlNode') -> None:
+        self.val = node.getVal()
+        self.height = node.height
+        self.l_child = node.getLeftChild()
+        self.r_child = node.getRightChild()
 
 class avlTree(BST):
     def __init__(self, root: avlNode, treshold=1) -> None:
@@ -174,10 +176,10 @@ class avlTree(BST):
         self.nodes = dict()
         self.treshold = treshold
 
-    def getBalanceFactor(self) -> int:
-        if self.root is None:
+    def getBalanceFactor(node:avlNode) -> int:
+        if node is None:
             return 0
-        return avlNode.determineHeight(self.root.getLeftChild())-avlNode.determineHeight(self.root.getRightChild())
+        return avlNode.getHeight(node.getLeftChild())-avlNode.getHeight(node.getRightChild())
 
     def leftRotate(self, node:avlNode):
         node_right:avlNode = node.getRightChild()
@@ -185,9 +187,6 @@ class avlTree(BST):
 
         node_right.setLeftChild(node)
         node.setRightChild(node_right_child)
-
-        node.getHeight()
-        node_right.getHeight()
 
         return node_right
 
@@ -198,17 +197,49 @@ class avlTree(BST):
         node_left.setRightChild(node)
         node.setLeftChild(node_left_child)
 
-        node.getHeight()
-        node_left.getHeight()
-
         return node_left
 
-
     def insert(self, val):
-        super().insert(val)
+         self.root = self._insertHelper(self.root, val)
+
+    def _insertHelper(self, node:avlNode, val:int) -> avlNode:	
+		# Step 1 - Perform normal BST
+        if not node:
+            return avlNode(val)
+        elif val < node.getVal():
+            node.setLeftChild(self._insertHelper(node.getLeftChild(), val))
+        else:
+            node.setRightChild(self._insertHelper(node.getRightChild(), val))
+
+        balance = avlTree.getBalanceFactor(node)
+
+        # L
+        if balance > self.treshold and val < node.getLeftChild().getVal():
+            return self.rightRotate(node)
+
+        # R
+        if balance < -self.treshold and val > node.getRightChild().getVal():
+            return self.leftRotate(node)
+
+        # LR
+        if balance > self.treshold and val > node.getLeftChild().getVal():
+            node.setLeftChild(self.leftRotate(node.getLeftChild()))
+            return self.rightRotate(node)
+
+        # RL
+        if balance < -self.treshold and val < node.getRightChild().getVal():
+            node.setRightChild(self.rightRotate(node.getRightChild()))
+            return self.leftRotate(node)
+
+        return node
+
+
+        # # próbowałem zrobić iteracyjnie ale nie wiem jak
         # node = self.root
         # last_node = node
-        # while node != None:
+        # node_list = []
+        # while node is not None:
+        #     node_list.append(node)
         #     if val >= node.getVal():
         #         last_node = node
         #         node = node.getRightChild()
@@ -219,34 +250,30 @@ class avlTree(BST):
         #     last_node.setRightChild(avlNode(val))
         # else:
         #     last_node.setLeftChild(avlNode(val))
-
-        self.root.getHeight()
-        balance = self.getBalanceFactor()
-
-        if balance > self.treshold and val < self.root.getLeftChild().getVal():
-            self.root =  self.rightRotate(self.root)
-
-        # Case 2 - Right Right
-        if balance < -self.treshold and val > self.root.getRightChild().getVal():
-            self.root = self.leftRotate(self.root)
-
-        # Case 3 - Left Right
-        if balance > self.treshold and val > self.root.getLeftChild().getVal():
-            self.root.setLeftChild(self.leftRotate(self.root.getLeftChild()))
-            self.root = self.rightRotate(self.root)
-
-        # Case 4 - Right Left
-        if balance < -self.treshold and val < self.root.getRightChild().getVal():
-            self.root.setRightChild(self.rightRotate(self.root.getRightChild()))
-            self.root = self.leftRotate(self.root)
+        
+        # while node_list:
+        #     n:avlNode = node_list.pop()
+        #     balance = avlTree.getBalanceFactor(n)
+        #     print(balance)
+       
+        #         # Left
+        #     if balance > self.treshold and val < n.getLeftChild().getVal():
+        #         old_root = n
 
 
+        #     # Right
+        #     if balance < -self.treshold and val > n.getRightChild().getVal():
+        #         pass
 
+        #     # Left Right
+        #     if balance > self.treshold and val > n.getLeftChild().getVal():
+        #         pass
 
-
-
-
-
-
-
-
+        #     # Right Left
+        #     if balance < -self.treshold and val < n.getRightChild().getVal():
+        #         pass
+        # print('__')
+        
+    # print([i.getVal() for i in node_list])
+        
+    
