@@ -6,23 +6,9 @@ class bstNode:
         self.l_child = None
         self.r_child = None
 
-    def setRightChild(self, val) -> None:
-        if val == None:
-            self.r_child = None
-        elif type(val) == bstNode:
-            self.r_child = val
-        else:
-            self.r_child = bstNode(val)
     def setRightChild(self, node:'bstNode') -> None:
         self.r_child = node
 
-    def setLeftChild(self, val) -> None:
-        if val == None:
-            self.r_left = None
-        elif type(val) == bstNode:
-            self.l_child = val
-        else:
-            self.l_child = bstNode(val)
     def setLeftChild(self, node:'bstNode') -> None:
         self.l_child = node
 

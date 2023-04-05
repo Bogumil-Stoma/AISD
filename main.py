@@ -14,7 +14,7 @@ def main():
 
     print("\n ")
     print(DRZEWO)
-    DRZEWO.remove(25)
+    DRZEWO.remove(8)
     print(DRZEWO)
 
 
