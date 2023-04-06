@@ -13,7 +13,7 @@ insert_times_avl = []
 remove_times_avl = []
 find_times_avl = []
 numbers = []
-NUM_OF_NUMBERS = 20
+NUM_OF_NUMBERS = 100
 for i in range(NUM_OF_NUMBERS*10):
     numbers.append(random.randint(1,300000))
 
@@ -57,12 +57,15 @@ def main():
     for i in range(1, 11):
         binary_tree = tree.BST(tree.bstNode(random.randint(1, 30000)))
         avl_tree = tree.avlTree(tree.avlNode(random.randint(1, 30000)))
+        
         insert_times_avl.append(measure_time(loop_insert, i, avl_tree))
         insert_times_blt.append(measure_time(loop_insert, i, binary_tree))
-        #insert_times.append(measure_time(loop_insert, i, binary_tree))
-        #remove_times.append(measure_time(loop_remove, i, binary_tree))
+
         find_times_blt.append(measure_time(loop_find, i, binary_tree))
         find_times_avl.append(measure_time(loop_find, i, avl_tree))
+
+        #insert_times.append(measure_time(loop_insert, i, binary_tree))
+        #remove_times.append(measure_time(loop_remove, i, binary_tree))
 
     plot_it('insert', insert_times_blt, insert_times_avl)
     plot_it('remove', insert_times_blt, remove_times_blt)
@@ -98,15 +101,24 @@ def main():
     DRZEWKO.insert(3)
     DRZEWKO.insert(2)
     DRZEWKO.insert(1)
-    print(DRZEWKO)
-    DRZEWKO.remove(10)
-    print(DRZEWKO)
-    DRZEWKO.remove(9)
-    print(DRZEWKO)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(10)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(9)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(20)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(9)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(3)
+    # print(DRZEWKO)
+    # DRZEWKO.remove(1)
+    # print(DRZEWKO)
 
     DRZEWUNIO = tree.avlTree(tree.avlNode(20))
     for _ in range(30):
         DRZEWUNIO.insert(random.randint(-100, 100))
+        #print(DRZEWUNIO)
     #print(DRZEWUNIO)
 
 

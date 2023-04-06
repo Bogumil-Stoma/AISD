@@ -349,8 +349,10 @@ class avlTree(BST):
 
         return node
 
+    def remove(self, val):
+        self.root = self._remove_helper(val, self.root)
 
-    def remove(self, val, node='no'):
+    def _remove_helper(self, val, node='no'):
         #super().remove(val)
         if node == 'no':
             node = self.root
@@ -359,10 +361,10 @@ class avlTree(BST):
             return node
 
         elif val < node.getVal():
-            node.setLeftChild(self.remove(val, node.getLeftChild()))
+            node.setLeftChild(self._remove_helper(val, node.getLeftChild()))
 
         elif val > node.getVal():
-            node.setRightChild(self.remove(val, node.getLeftChild()))
+            node.setRightChild(self._remove_helper(val, node.getRightChild()))
 
         else:
             if node.getLeftChild() is None:
@@ -377,7 +379,7 @@ class avlTree(BST):
 
             temp = self.getMinValueNode(node.getRightChild())
             node.val = temp.getVal()
-            node.setRightChild(self.remove(temp.getVal(), node.getLeftChild()))
+            node.setRightChild(self._remove_helper(temp.getVal(), node.getRightChild()))
         if node is None:
             return node
 
