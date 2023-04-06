@@ -59,11 +59,11 @@ class bstNode:
 
 
 class BST:
-    def __init__(self, root):
+    def __init__(self, root: bstNode) -> None:
         self.root:bstNode = root
         self.nodes = dict()
 
-    def insert(self, val):
+    def insert(self, val) -> None:
         node = self.root
         last_node = node
         while node is not None:
@@ -90,126 +90,54 @@ class BST:
 
         return False
 
-    def remove(self, val, node='no'):
-        '''
-        ##if self.root == None:
-          ##  return None
-        if node == 'no':
-            node = self.root
-        if node == None:
-            return None
-        if val > node.val:
-            node.setRightChild(self.remove(val, node.getRightChild()))
-        elif val < node.val:
-            node.setLeftChild(self.remove(val, node.getLeftChild()))
-        else:
-            if node.getRightChild() == None:
-                return node.getLeftChild()
-            elif node.getLeftChild() == None:
-                return node.getRightChild()
-            if node.getRightChild().val == val:
-                node.setRightChild(self.remove(val, node.getLeftChild()))
-                return node
-            elif node.getLeftChild().val == val:
-                node.setLeftChild(self.remove(val, node.getLeftChild()))
-                return node
-            min_node = node.getRightChild()
-            while min_node.getLeftChild():
-                min_node = min_node.getLeftChild()
-            min_val = min_node.val
-            self.remove(min_val)
+    def remove(self, val:int):
+        node = self.root
+        prev_node = None
 
-            node.val = min_val
-            return node
-        return node
-        '''
-        curr = self.root
-        prev = None
-
-        # First check if the key is
-        # actually present in the BST.
-        # the variable prev points to the
-        # parent of the key to be deleted
-        while(curr != None and curr.val != val):
-            prev = curr
-            if curr.val < val:
-                curr = curr.getRightChild()
+        while(node != None and node.val != val):
+            prev_node = node
+            if node.val < val:
+                node = node.getRightChild()
             else:
-                curr = curr.getLeftChild()
+                node = node.getLeftChild()
 
-        if curr == None:
-           # print("Key % d not found in\
-            #the provided BST." % val)
+        if node == None:
             return self.root
 
-        # Check if the node to be
-        # deleted has atmost one child
-        if curr.getLeftChild() == None or\
-                curr.getRightChild() == None:
 
-            # newCurr will replace
-            # the node to be deleted.
-            newCurr = None
-
-            # if the left child does not exist.
-            if curr.getLeftChild() == None:
-                newCurr = curr.getRightChild()
+        if node.getLeftChild() == None or node.getRightChild() == None:
+            new_node = None
+            if node.getLeftChild() == None:
+                new_node = node.getRightChild()
             else:
-                newCurr = curr.getLeftChild()
-
-            # check if the node to
-            # be deleted is the root.
-            if prev == None:
-                return newCurr
-
-            # Check if the node to be
-            # deleted is prev's left or
-            # right child and then
-            # replace this with newCurr
-            if curr == prev.getLeftChild():
-                prev.setLeftChild(newCurr)
+                new_node = node.getLeftChild()
+            if prev_node == None:
+                return new_node
+            if node == prev_node.getLeftChild():
+                prev_node.setLeftChild(new_node)
             else:
-                prev.setRightChild(newCurr)
+                prev_node.setRightChild(new_node)
+            node = None
 
-            curr = None
-
-        # node to be deleted
-        # has two children.
         else:
-            p = None
+            parent_node = None
             temp = None
-
-            # Compute the inorder
-            # successor of curr.
-            temp = curr.getRightChild()
+            temp = node.getRightChild()
             while(temp.getLeftChild() != None):
-                p = temp
+                parent_node = temp
                 temp = temp.getLeftChild()
-
-            # check if the parent of the
-            # inorder successor is the root or not.
-            # if it isn't, then make the left
-            # child of its parent equal to the
-            # inorder successor's right child.
-            if p != None:
-                p.setLeftChild(temp.getRightChild())
-
+            if parent_node != None:
+                parent_node.setLeftChild(temp.getRightChild())
             else:
+                node.setRightChild(temp.getRightChild())
 
-                # if the inorder successor was
-                # the root, then make the right child
-                # of the node to be deleted equal
-                # to the right child of the inorder
-                # successor.
-                curr.setRightChild(temp.getRightChild())
-
-            curr.val = temp.val
+            node.val = temp.val
             temp = None
 
         return self.root
 
 
-    def tree_dict(self, node: bstNode = 0, level=0, index=0, rights=0):
+    def tree_dict(self, node: bstNode = 0, level=0, index=0, rights=0) -> None:
         if node == 0:
             node = self.root
         if node == None:
@@ -228,22 +156,12 @@ class BST:
             self.tree_dict(node.getLeftChild(), level+1, l_index, rights)
             self.tree_dict(node.getRightChild(), level+1, index+2**rights, 2**rights)
 
-    # def __str__(self):
-    #     self.tree_dict()
-    #     suma = ''
-    #     for key in self.nodes:
-    #         suma += '   '.join(self.nodes[key]).center(8*len(self.nodes))+'\n'
-    #     return suma
-
     def __str__(self) -> str:
         lines, *_ = self.root._printHelper()
         out_str = ""
         for line in lines:
             out_str += (line + "\n")
         return out_str
-
-
-
 
 class avlNode(bstNode):
     def __init__(self, val) -> None:
@@ -253,13 +171,9 @@ class avlNode(bstNode):
     def getHeight(node: 'avlNode') -> int:
         if node is None:
             return 0
-        #if node.getLeftChild() == None or node.getRightChild() == None:
-           # return -1
         l_height = avlNode.getHeight(node.getLeftChild()) + 1
         r_height = avlNode.getHeight(node.getRightChild()) + 1
         return l_height if l_height > r_height else r_height
-
-
 
     def replace(self, node:'avlNode') -> None:
         self.val = node.getVal()
@@ -278,7 +192,7 @@ class avlTree(BST):
             return 0
         return self.getHeight(node.getLeftChild())-self.getHeight(node.getRightChild())
 
-    def leftRotate(self, node:avlNode):
+    def leftRotate(self, node:avlNode) -> avlNode:
         node_right:avlNode = node.getRightChild()
         if node_right == None:
             return node_right
@@ -294,7 +208,7 @@ class avlTree(BST):
 
         return node_right
 
-    def rightRotate(self, node:avlNode):
+    def rightRotate(self, node:avlNode) -> avlNode:
         node_left:avlNode = node.getLeftChild()
         if node_left == None:
             return node_left
@@ -309,10 +223,10 @@ class avlTree(BST):
                         self.getHeight(node_left.getRightChild()))
         return node_left
 
-    def insert(self, val):
+    def insert(self, val:int) -> None:
          self.root = self._insertHelper(self.root, val)
 
-    def getHeight(self, node):
+    def getHeight(self, node:avlNode) -> int:
         if not node:
             return 0
         return node.height
@@ -349,11 +263,10 @@ class avlTree(BST):
 
         return node
 
-    def remove(self, val):
+    def remove(self, val:int) -> None:
         self.root = self._remove_helper(val, self.root)
 
-    def _remove_helper(self, val, node='no'):
-        #super().remove(val)
+    def _remove_helper(self, val:int, node:avlNode='no') -> avlNode:
         if node == 'no':
             node = self.root
 
@@ -388,23 +301,23 @@ class avlTree(BST):
 
         balance = self.getBalanceFactor(node)
 
-        if balance > 1 and self.getBalanceFactor(node.getLeftChild()) >= 0:
+        if balance > self.treshold and self.getBalanceFactor(node.getLeftChild()) >= 0:
             return self.rightRotate(node)
 
-        if balance < -1 and self.getBalanceFactor(node.getRightChild()) <= 0:
+        if balance < -self.treshold and self.getBalanceFactor(node.getRightChild()) <= 0:
             return self.leftRotate(node)
 
-        if balance > 1 and self.getBalanceFactor(node.getLeftChild()) < 0:
+        if balance > self.treshold and self.getBalanceFactor(node.getLeftChild()) < 0:
             node.setLeftChild(self.leftRotate(node.getLeftChild()))
             return self.rightRotate(node)
 
-        if balance < -1 and self.getBalanceFactor(node.getRightChild()) > 0:
+        if balance < -self.treshold and self.getBalanceFactor(node.getRightChild()) > 0:
             node.setRightChild(self.rightRotate(node.getRightChild()))
             return self.leftRotate(node)
 
         return node
 
-    def getMinValueNode(self, node):
+    def getMinValueNode(self, node:avlNode) -> avlNode:
         if node is None or node.getLeftChild() is None:
             return node
 

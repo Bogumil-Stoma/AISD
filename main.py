@@ -44,7 +44,6 @@ def loop_remove(i, tree):
         tree.remove(numbers[j])
 
 def plot_it(name, bst_time, avl_time):
-    #plt.figure(10)
     plt.plot(bst_time, label = 'bst')
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
@@ -76,9 +75,6 @@ def main():
     print(insert_times_avl)
     print(insert_times_blt)
 
-    # print(find_times_blt)
-    # plt.plot([i*10000 for i in range(1,11)], insert_times_blt)
-    # plt.show()
     nodzik = tree.bstNode(20)
     DRZEWO = tree.BST(nodzik)
     DRZEWO.insert(10)
