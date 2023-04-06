@@ -13,13 +13,14 @@ insert_times_avl = []
 remove_times_avl = []
 find_times_avl = []
 numbers = []
-NUM_OF_NUMBERS = 100
+NUM_OF_NUMBERS = 1000
 for i in range(NUM_OF_NUMBERS*10):
     numbers.append(random.randint(1,300000))
 
 def measure_time(my_function, i, binary_tree):
     sum_time = 0
-    for j in range(5):
+    num_of_tries = 10
+    for j in range(num_of_tries):
         gc_old = gc.isenabled()
         gc.disable()
         start = time.process_time()
@@ -27,7 +28,7 @@ def measure_time(my_function, i, binary_tree):
         stop = time.process_time()
         if gc_old: gc.enable()
         sum_time+=(stop-start)
-    return sum_time/5
+    return sum_time/num_of_tries
 
 
 def loop_insert(i, tree):
@@ -48,6 +49,7 @@ def plot_it(name, bst_time, avl_time):
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
     plt.plot(avl_time, label = 'avl')
+    plt.xticks(range(10),[i*NUM_OF_NUMBERS for i in range(1,11)])
     plt.suptitle(name)
     plt.legend()
     plt.savefig(name+'.png')
@@ -57,22 +59,23 @@ def main():
     for i in range(1, 11):
         binary_tree = tree.BST(tree.bstNode(random.randint(1, 30000)))
         avl_tree = tree.avlTree(tree.avlNode(random.randint(1, 30000)))
-        
-        insert_times_avl.append(measure_time(loop_insert, i, avl_tree))
+
         insert_times_blt.append(measure_time(loop_insert, i, binary_tree))
+        insert_times_avl.append(measure_time(loop_insert, i, avl_tree))
 
         find_times_blt.append(measure_time(loop_find, i, binary_tree))
         find_times_avl.append(measure_time(loop_find, i, avl_tree))
 
-        #insert_times.append(measure_time(loop_insert, i, binary_tree))
-        #remove_times.append(measure_time(loop_remove, i, binary_tree))
+        remove_times_blt.append(measure_time(loop_insert, i, binary_tree))
+        remove_times_avl.append(measure_time(loop_remove, i, avl_tree))
 
     plot_it('insert', insert_times_blt, insert_times_avl)
-    plot_it('remove', insert_times_blt, remove_times_blt)
+    plot_it('remove', remove_times_blt, find_times_avl)
     plot_it('find', find_times_blt, find_times_avl)
 
     print(insert_times_avl)
     print(insert_times_blt)
+
     # print(find_times_blt)
     # plt.plot([i*10000 for i in range(1,11)], insert_times_blt)
     # plt.show()
