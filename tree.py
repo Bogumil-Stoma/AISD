@@ -1,22 +1,20 @@
-
-
 class bstNode:
     def __init__(self, val) -> None:
         self.val = val
-        self.l_child = None
-        self.r_child = None
+        self.left = None
+        self.right = None
 
     def setRightChild(self, node:'bstNode') -> None:
-        self.r_child = node
+        self.right = node
 
     def setLeftChild(self, node:'bstNode') -> None:
-        self.l_child = node
+        self.left = node
 
     def getRightChild(self):
-        return self.r_child
+        return self.right
 
     def getLeftChild(self):
-        return self.l_child
+        return self.left
 
     def getVal(self) -> int:
         return self.val
@@ -32,22 +30,22 @@ class bstNode:
     def _printHelper(self) -> str:
         val_str = str(self.val)
         val_len = len(val_str)
-        if self.l_child is None and self.r_child is None:
+        if self.left is None and self.right is None:
             return [val_str], val_len, 1, val_len//2
-        if self.l_child is None:
-            lines, width, height, middle = self.r_child._printHelper()
+        if self.left is None:
+            lines, width, height, middle = self.right._printHelper()
             line_1 = val_str+middle*'_'+(width-middle)*' '
             line_2 = (val_len+middle)*' '+'\\'+(width-middle-1)*' '
             lines = [val_len*' ' + line for line in lines]
             return [line_1, line_2]+lines, width+val_len, height+2, val_len//2
-        if self.r_child is None:
-            lines, width, height, middle = self.l_child._printHelper()
+        if self.right is None:
+            lines, width, height, middle = self.left._printHelper()
             line_1 = (middle+1)*' '+(width-middle-1)*'_'+val_str
             line_2 = middle*' '+'/'+(width-middle-1+val_len)*' '
             lines = [line+val_len*' 'for line in lines]
             return [line_1, line_2]+lines, width+val_len, height+2, width+val_len//2
-        l_lines, l_width, l_height, l_middle = self.l_child._printHelper()
-        r_lines, r_width, r_height, r_middle = self.r_child._printHelper()
+        l_lines, l_width, l_height, l_middle = self.left._printHelper()
+        r_lines, r_width, r_height, r_middle = self.right._printHelper()
         line_1 = (l_middle+1)*' '+(l_width - l_middle - 1)*'_'+val_str+r_middle*'_'+(r_width-r_middle)*' '
         line_2 = l_middle*' '+'/'+(l_width-l_middle-1+val_len+r_middle)*' '+'\\'+(r_width-r_middle-1)*' '
         if l_height < r_height:
@@ -58,7 +56,7 @@ class bstNode:
         val_len+r_width+l_width, max(l_height, r_height)+2, l_width+val_len//2
 
 
-class BST:
+class bstTree:
     def __init__(self, root: bstNode) -> None:
         self.root:bstNode = root
         self.nodes = dict()
@@ -82,7 +80,7 @@ class BST:
         node = self.root
         while (node is not None):
             if node.getVal() == val:
-                return BST(node)
+                return bstTree(node)
             elif val > node.getVal():
                 node = node.getRightChild()
             else:
@@ -163,9 +161,17 @@ class BST:
             out_str += (line + "\n")
         return out_str
 
+    def save(self):
+        with open('text.txt', 'w') as fp:
+            lines, *_ = self.root._printHelper()
+            for line in lines:
+                fp.write(line + "\n")
+
 class avlNode(bstNode):
-    def __init__(self, val) -> None:
-        bstNode.__init__(self, val)
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
         self.height = 1
 
     def getHeight(node: 'avlNode') -> int:
@@ -181,7 +187,7 @@ class avlNode(bstNode):
         self.l_child = node.getLeftChild()
         self.r_child = node.getRightChild()
 
-class avlTree(BST):
+class avlTree(bstTree):
     def __init__(self, root: avlNode, treshold=1) -> None:
         self.root:avlNode = root
         self.nodes = dict()
@@ -266,10 +272,7 @@ class avlTree(BST):
     def remove(self, val:int) -> None:
         self.root = self._remove_helper(val, self.root)
 
-    def _remove_helper(self, val:int, node:avlNode='no') -> avlNode:
-        if node == 'no':
-            node = self.root
-
+    def _remove_helper(self, val:int, node:avlNode) -> avlNode:
         if not node:
             return node
 
@@ -280,19 +283,19 @@ class avlTree(BST):
             node.setRightChild(self._remove_helper(val, node.getRightChild()))
 
         else:
-            if node.getLeftChild() is None:
-                temp = node.getRightChild()
+            if not node.getLeftChild() and not node.getRightChild():
                 node = None
-                return temp
+            elif node.getLeftChild() is None:
+                node = node.getRightChild()
 
             elif node.getRightChild() is None:
-                temp = node.getLeftChild()
-                node = None
-                return temp
+                node = node.getLeftChild()
+            else:
 
-            temp = self.getMinValueNode(node.getRightChild())
-            node.val = temp.getVal()
-            node.setRightChild(self._remove_helper(temp.getVal(), node.getRightChild()))
+
+                temp = self.getMinValueNode(node.getRightChild())
+                node.val = temp.getVal()
+                node.setRightChild(self._remove_helper(temp.getVal(), node.getRightChild()))
         if node is None:
             return node
 
