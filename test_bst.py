@@ -64,7 +64,48 @@ def test_insert_complex():
 
 
 def test_find():
-    pass
+    nodzik = bstNode(54)
+    DRZEWO = bstTree(nodzik)
+    DRZEWO.insert(48)
+    DRZEWO.insert(42)
+    DRZEWO.insert(53)
+    DRZEWO.insert(52)
+    DRZEWO.insert(58)
+    DRZEWO.insert(90)
+    DRZEWO.insert(98)
+    DRZEWO.insert(83)
+    DRZEWO.insert(76)
+    DRZEWO.insert(88)
+    assert(DRZEWO.find(48))
+    assert(DRZEWO.find(42))
+    assert(DRZEWO.find(53))
+    assert(DRZEWO.find(58))
+    assert(DRZEWO.find(90))
+    assert(DRZEWO.find(98))
+    assert(DRZEWO.find(83))
+    assert(DRZEWO.find(76))
+    assert(DRZEWO.find(88))
+    assert(not DRZEWO.find(91))
+    assert(not DRZEWO.find(1))
+
 
 def test_remove():
-    pass
+    nodzik = bstNode(54)
+    DRZEWO = bstTree(nodzik)
+    DRZEWO.insert(48)
+    DRZEWO.insert(42)
+    DRZEWO.insert(53)
+    DRZEWO.insert(52)
+    DRZEWO.insert(58)
+    DRZEWO.insert(90)
+    DRZEWO.insert(98)
+    DRZEWO.insert(83)
+    DRZEWO.insert(76)
+    DRZEWO.insert(88)
+    DRZEWO.remove(42)
+    DRZEWO.remove(58)
+    DRZEWO.remove(54)
+    inorder_list = [48, 52, 53, 76, 83, 88, 90, 98]
+    val_list = []
+    bstTree.traverseInorder(nodzik, val_list)
+    assert(inorder_list == val_list)
