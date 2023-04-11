@@ -167,6 +167,15 @@ class bstTree:
             for line in lines:
                 fp.write(line + "\n")
 
+    def traverseInorder(node: bstNode, val_list):
+            if node:
+                bstTree.traverseInorder(node.getLeftChild(), val_list)
+                
+                val_list.append(node.getVal())
+                
+                bstTree.traverseInorder(node.getRightChild(), val_list)
+   
+
 class avlNode(bstNode):
     def __init__(self, val):
         self.val = val
