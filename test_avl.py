@@ -43,10 +43,82 @@ def test_insert_1():
 
 
 def test_insert_2():
-    pass
+    #     ___8__   
+    #    /      \  
+    #   _4_    10_ 
+    #  /   \  /   \
+    #  2   6  9  20
+    # / \ / \      
+    # 1 3 5 7      
+    nodzik = avlNode(20)
+    DRZEWO = avlTree(nodzik)
+    DRZEWO.insert(10)
+    DRZEWO.insert(9)
+    DRZEWO.insert(8)
+    DRZEWO.insert(7)
+    DRZEWO.insert(6)
+    DRZEWO.insert(5)
+    DRZEWO.insert(4)
+    DRZEWO.insert(3)
+    DRZEWO.insert(2)
+    DRZEWO.insert(1)
+    inorder_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+    val_list = []
+    avlTree.traverseInorder(DRZEWO.root, val_list)
+    assert(inorder_list == val_list)
+
 
 def test_find():
-    pass
+    nodzik = avlNode(20)
+    DRZEWO = avlTree(nodzik)
+    DRZEWO.insert(48)
+    DRZEWO.insert(14)
+    DRZEWO.insert(73)
+    DRZEWO.insert(29)
+    DRZEWO.insert(65)
+    DRZEWO.insert(36)
+    DRZEWO.insert(67)
+    DRZEWO.insert(78)
+    DRZEWO.insert(13)
+    DRZEWO.insert(93)
+    assert(DRZEWO.find(48))
+    assert(DRZEWO.find(14))
+    assert(DRZEWO.find(73))
+    assert(DRZEWO.find(29))
+    assert(DRZEWO.find(65))
+    assert(DRZEWO.find(36))
+    assert(DRZEWO.find(67))
+    assert(DRZEWO.find(78))
+    assert(DRZEWO.find(13))
+    assert(DRZEWO.find(93))
+    assert(not DRZEWO.find(90))
+    assert(not DRZEWO.find(100))
+    assert(not DRZEWO.find(-20))
 
 def test_remove():
-    pass
+#     __65_____   
+#    /         \  
+#   29_     __78_ 
+#  /   \   /     \
+# 20  36  67_   93
+#            \    
+#           73  
+    nodzik = avlNode(20)
+    DRZEWO = avlTree(nodzik)
+    DRZEWO.insert(48)
+    DRZEWO.insert(14)
+    DRZEWO.insert(73)
+    DRZEWO.insert(29)
+    DRZEWO.insert(65)
+    DRZEWO.insert(36)
+    DRZEWO.insert(67)
+    DRZEWO.insert(78)
+    DRZEWO.insert(13)
+    DRZEWO.insert(93)
+    DRZEWO.remove(13)
+    DRZEWO.remove(48)
+    DRZEWO.remove(14)
+    inorder_list = [20, 29, 36, 65, 67, 73, 78, 93]
+    val_list = []
+    avlTree.traverseInorder(DRZEWO.root, val_list)
+    assert(inorder_list == val_list)

@@ -6,7 +6,7 @@ def test_traverse_inorder():
     node3 = bstNode(15)
     node4 = bstNode(20)
     node5 = bstNode(11)
-    DRZEWO = bstTree(node1)
+    # DRZEWO = bstTree(node1)
     node1.setLeftChild(node2)
     node1.setRightChild(node3)
     node3.setLeftChild(node5)
