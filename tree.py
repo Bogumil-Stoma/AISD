@@ -167,7 +167,7 @@ class bstTree:
             for line in lines:
                 fp.write(line + "\n")
 
-    def traverseInorder(node: bstNode, val_list):
+    def traverseInorder(node: bstNode, val_list: list):
             if node:
                 bstTree.traverseInorder(node.getLeftChild(), val_list)
                 
@@ -240,6 +240,9 @@ class avlTree(bstTree):
 
     def insert(self, val:int) -> None:
          self.root = self._insertHelper(self.root, val)
+    
+    def insert1(self, val) -> None:
+        pass
 
     def getHeight(self, node:avlNode) -> int:
         if not node:

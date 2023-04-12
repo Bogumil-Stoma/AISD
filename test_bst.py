@@ -36,15 +36,8 @@ def test_insert_simple():
         curr_node = curr_node.getLeftChild()
 
 def test_insert_complex():
-#     ____54_           
-#    /       \          
-#   48___   58_______   
-#  /     \           \  
-# 42    53        __90_ 
-#      /         /     \
-#     52        83_   98
-#              /   \    
-#             76  88    
+
+
     nodzik = bstNode(54)
     DRZEWO = bstTree(nodzik)
     DRZEWO.insert(48)
