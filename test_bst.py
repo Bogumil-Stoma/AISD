@@ -1,4 +1,5 @@
 from tree import bstNode, bstTree
+import pytest
 
 def test_traverse_inorder():
     node1 = bstNode(10)
@@ -102,3 +103,19 @@ def test_remove():
     val_list = []
     bstTree.traverseInorder(nodzik, val_list)
     assert(inorder_list == val_list)
+
+def test_value_repeat():
+    nodzik = bstNode(54)
+    DRZEWO = bstTree(nodzik)
+    DRZEWO.insert(48)
+    DRZEWO.insert(42)
+    DRZEWO.insert(53)
+    DRZEWO.insert(52)
+    DRZEWO.insert(58)
+    DRZEWO.insert(90)
+    DRZEWO.insert(98)
+    DRZEWO.insert(83)
+    DRZEWO.insert(76)
+    DRZEWO.insert(88)
+    with pytest.raises(ValueError):
+        DRZEWO.insert(48)

@@ -1,4 +1,5 @@
 from tree import avlTree, avlNode
+import pytest
 
 def test_traverse_inorder():
     node1 = avlNode(10)
@@ -122,3 +123,6 @@ def test_remove():
     val_list = []
     avlTree.traverseInorder(DRZEWO.root, val_list)
     assert(inorder_list == val_list)
+
+def test_value_repeat():
+    pass
