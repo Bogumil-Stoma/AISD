@@ -65,13 +65,16 @@ class bstTree:
         node = self.root
         last_node = node
         while node is not None:
-            if val >= node.getVal():
+            if val > node.getVal():
                 last_node = node
                 node = node.getRightChild()
-            else:
+            elif val < node.getVal():
                 last_node = node
                 node = node.getLeftChild()
-        if val >= last_node.getVal():
+            else:
+                raise ValueError("This valuse is already present")
+        
+        if val > last_node.getVal():
             last_node.setRightChild(self.root.__class__(val))
         else:
             last_node.setLeftChild(self.root.__class__(val))
@@ -85,7 +88,6 @@ class bstTree:
                 node = node.getRightChild()
             else:
                 node = node.getLeftChild()
-
         return False
 
     def remove(self, val:int):
@@ -242,12 +244,55 @@ class avlTree(bstTree):
          self.root = self._insertHelper(self.root, val)
     
     def insert1(self, val) -> None:
-        pass
+        node = self.root
+        last_node = node
+        node_stack = []
+        while node is not None:
+            node_stack.append(node)
+            if val > node.getVal():
+                last_node = node
+                node = node.getRightChild()
+            elif val < node.getVal():
+                last_node = node
+                node = node.getLeftChild()
+            else:
+                raise ValueError("This valuse is already present")
+        if val > last_node.getVal():
+            last_node.setRightChild(self.root.__class__(val))
+        else:
+            last_node.setLeftChild(self.root.__class__(val))
+        
+        last_node.height = 1 + max(self.getHeight(node.getLeftChild()),
+                           self.getHeight(node.getRightChild()))
+
+        while node_stack[:1]:
+            node: avlNode = node_stack.pop()
+            balance = self.getBalanceFactor(node)
+            parent = node_stack[-1]
+            # L
+            if balance > self.treshold and val < node.getLeftChild().getVal():
+                return self.rightRotate(node)
+
+            # R
+            elif balance < -self.treshold and val > node.getRightChild().getVal():
+                return self.leftRotate(node)
+
+            # LR
+            elif balance > self.treshold and val > node.getLeftChild().getVal():
+                node.setLeftChild(self.leftRotate(node.getLeftChild()))
+                return self.rightRotate(node)
+
+            # RL
+            elif balance < -self.treshold and val < node.getRightChild().getVal():
+                node.setRightChild(self.rightRotate(node.getRightChild()))
+                return self.leftRotate(node)
+
 
     def getHeight(self, node:avlNode) -> int:
         if not node:
             return 0
         return node.height
+    
     def _insertHelper(self, node:avlNode, val:int) -> avlNode:
 
         if not node:
