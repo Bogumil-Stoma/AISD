@@ -68,6 +68,42 @@ def test_insert_2():
     avlTree.traverseInorder(DRZEWO.root, val_list)
     assert(inorder_list == val_list)
 
+def test_insertIter_1():
+    nodzik = avlNode(20)
+    DRZEWO = avlTree(nodzik)
+    DRZEWO.insertIter(10)
+    DRZEWO.insertIter(9)
+    DRZEWO.insertIter(8)
+    DRZEWO.insertIter(7)
+    DRZEWO.insertIter(6)
+    DRZEWO.insertIter(5)
+    DRZEWO.insertIter(4)
+    DRZEWO.insertIter(3)
+    DRZEWO.insertIter(2)
+    DRZEWO.insertIter(1)
+    inorder_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+    val_list = []
+    avlTree.traverseInorder(DRZEWO.root, val_list)
+    assert(inorder_list == val_list)
+
+def test_insertIter_2():
+    nodzik = avlNode(10)
+    DRZEWO = avlTree(nodzik)
+    DRZEWO.insertIter(9)
+    DRZEWO.insertIter(8)
+    DRZEWO.insertIter(7)
+    DRZEWO.insertIter(6)
+    DRZEWO.insertIter(5)
+    DRZEWO.insertIter(4)
+    DRZEWO.insertIter(3)
+    DRZEWO.insertIter(2)
+    DRZEWO.insertIter(1)
+    inorder_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+    val_list = []
+    avlTree.traverseInorder(DRZEWO.root, val_list)
+    assert(inorder_list == val_list)
+
+
 
 def test_find():
     nodzik = avlNode(20)

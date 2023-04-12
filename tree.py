@@ -75,9 +75,9 @@ class bstTree:
                 raise ValueError("This valuse is already present")
         
         if val > last_node.getVal():
-            last_node.setRightChild(self.root.__class__(val))
+            last_node.setRightChild(bstNode(val))
         else:
-            last_node.setLeftChild(self.root.__class__(val))
+            last_node.setLeftChild(bstNode(val))
 
     def find(self, val):
         node = self.root
@@ -192,11 +192,11 @@ class avlNode(bstNode):
         r_height = avlNode.getHeight(node.getRightChild()) + 1
         return l_height if l_height > r_height else r_height
 
-    def replace(self, node:'avlNode') -> None:
-        self.val = node.getVal()
-        self.height = node.height
-        self.l_child = node.getLeftChild()
-        self.r_child = node.getRightChild()
+    # def replace(self, node:'avlNode') -> None:
+    #     self.val = node.getVal()
+    #     self.height = node.height
+    #     self.l_child = node.getLeftChild()
+    #     self.r_child = node.getRightChild()
 
 class avlTree(bstTree):
     def __init__(self, root: avlNode, treshold=1) -> None:
@@ -210,41 +210,43 @@ class avlTree(bstTree):
         return self.getHeight(node.getLeftChild())-self.getHeight(node.getRightChild())
 
     def leftRotate(self, node:avlNode) -> avlNode:
-        node_right:avlNode = node.getRightChild()
-        if node_right == None:
-            return node_right
-        node_right_child:avlNode = node_right.getLeftChild()
+        node_b:avlNode = node.getRightChild()
+        if node_b == None:
+            return node_b
+        node_b_child:avlNode = node_b.getLeftChild()
 
-        node_right.setLeftChild(node)
-        node.setRightChild(node_right_child)
+        node_b.setLeftChild(node)
+        node.setRightChild(node_b_child)
 
         node.height = 1 + max(self.getHeight(node.getLeftChild()),
                         self.getHeight(node.getRightChild()))
-        node_right.height = 1 + max(self.getHeight(node_right.getLeftChild()),
-                        self.getHeight(node_right.getRightChild()))
+        node_b.height = 1 + max(self.getHeight(node_b.getLeftChild()),
+                        self.getHeight(node_b.getRightChild()))
 
-        return node_right
+        return node_b
 
     def rightRotate(self, node:avlNode) -> avlNode:
-        node_left:avlNode = node.getLeftChild()
-        if node_left == None:
-            return node_left
-        node_left_child:avlNode = node_left.getRightChild()
+        node_b:avlNode = node.getLeftChild()
+        if node_b == None:
+            return node_b
+        node_b_child:avlNode = node_b.getRightChild()
 
-        node_left.setRightChild(node)
-        node.setLeftChild(node_left_child)
+        node_b.setRightChild(node)
+        node.setLeftChild(node_b_child)
 
         node.height = 1 + max(self.getHeight(node.getLeftChild()),
                         self.getHeight(node.getRightChild()))
-        node_left.height = 1 + max(self.getHeight(node_left.getLeftChild()),
-                        self.getHeight(node_left.getRightChild()))
-        return node_left
+        node_b.height = 1 + max(self.getHeight(node_b.getLeftChild()),
+                        self.getHeight(node_b.getRightChild()))
+        return node_b
 
-    def insert(self, val:int) -> None:
-         self.root = self._insertHelper(self.root, val)
+    def getHeight(self, node:avlNode) -> int:
+        if not node:
+            return 0
+        return node.height
     
-    def insert1(self, val) -> None:
-        node = self.root
+    def insertIter(self, val) -> None:
+        node: avlNode = self.root
         last_node = node
         node_stack = []
         while node is not None:
@@ -257,41 +259,71 @@ class avlTree(bstTree):
                 node = node.getLeftChild()
             else:
                 raise ValueError("This valuse is already present")
-        if val > last_node.getVal():
-            last_node.setRightChild(self.root.__class__(val))
-        else:
-            last_node.setLeftChild(self.root.__class__(val))
         
-        last_node.height = 1 + max(self.getHeight(node.getLeftChild()),
-                           self.getHeight(node.getRightChild()))
+        if val > last_node.getVal():
+            last_node.setRightChild(avlNode(val))
+        else:
+            last_node.setLeftChild(avlNode(val))
+        
+        last_node.height = 1 + max(self.getHeight(last_node.getLeftChild()), self.getHeight(last_node.getRightChild()))
 
-        while node_stack[:1]:
+        while node_stack[1:]:
             node: avlNode = node_stack.pop()
             balance = self.getBalanceFactor(node)
-            parent = node_stack[-1]
+            parent: avlNode = node_stack[-1]
+            
             # L
-            if balance > self.treshold and val < node.getLeftChild().getVal():
-                return self.rightRotate(node)
+            if balance > abs(self.treshold):
+                node_b:avlNode = None
+                # node_b_child:avlNode = None
+                if balance > self.treshold and val < node.getLeftChild().getVal():
+                    node_b = self.leftRotate(node)
 
-            # R
-            elif balance < -self.treshold and val > node.getRightChild().getVal():
-                return self.leftRotate(node)
+                # R
+                elif balance < -self.treshold and val > node.getRightChild().getVal():
+                    node_b = self.rightRotate(node)
 
-            # LR
-            elif balance > self.treshold and val > node.getLeftChild().getVal():
-                node.setLeftChild(self.leftRotate(node.getLeftChild()))
-                return self.rightRotate(node)
+                # LR
+                elif balance > self.treshold and val > node.getLeftChild().getVal():
+                    node.setLeftChild(self.leftRotate(node.getLeftChild()))
+                    node_b = self.rightRotate(node)
 
-            # RL
-            elif balance < -self.treshold and val < node.getRightChild().getVal():
-                node.setRightChild(self.rightRotate(node.getRightChild()))
-                return self.leftRotate(node)
+                # RL
+                elif balance < -self.treshold and val < node.getRightChild().getVal():
+                    node.setRightChild(self.rightRotate(node.getRightChild()))
+                    node_b =  self.leftRotate(node)
+                
+                if parent.getLeftChild() == node:
+                    parent.setLeftChild(node_b)
+                else:
+                    parent.setRightChild(node_b)
+                parent.height = 1+ max(self.getHeight(parent.getLeftChild()), self.getHeight(parent.getRightChild()))
+        node = node_stack[0]
+        balance = self.getBalanceFactor(node)
+        node_b = None
+        # L
+        if balance > self.treshold and val < node.getLeftChild().getVal():
+            node_b = self.leftRotate(node)
 
+        # R
+        elif balance < -self.treshold and val > node.getRightChild().getVal():
+            node_b = self.rightRotate(node)
 
-    def getHeight(self, node:avlNode) -> int:
-        if not node:
-            return 0
-        return node.height
+        # LR
+        elif balance > self.treshold and val > node.getLeftChild().getVal():
+            node.setLeftChild(self.leftRotate(node.getLeftChild()))
+            node_b = self.rightRotate(node)
+
+        # RL
+        elif balance < -self.treshold and val < node.getRightChild().getVal():
+            node.setRightChild(self.rightRotate(node.getRightChild()))
+            node_b = self.leftRotate(node)    
+
+        if node_b:
+            self.root = node_b
+        
+    def insert(self, val:int) -> None:
+         self.root = self._insertHelper(self.root, val)
     
     def _insertHelper(self, node:avlNode, val:int) -> avlNode:
 
