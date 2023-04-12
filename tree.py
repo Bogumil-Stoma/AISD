@@ -72,7 +72,8 @@ class bstTree:
                 last_node = node
                 node = node.getLeftChild()
             else:
-                raise ValueError("This valuse is already present")
+                # raise ValueError("This valuse is already present")
+                return
         
         if val > last_node.getVal():
             last_node.setRightChild(bstNode(val))
@@ -192,12 +193,6 @@ class avlNode(bstNode):
         r_height = avlNode.getHeight(node.getRightChild()) + 1
         return l_height if l_height > r_height else r_height
 
-    # def replace(self, node:'avlNode') -> None:
-    #     self.val = node.getVal()
-    #     self.height = node.height
-    #     self.l_child = node.getLeftChild()
-    #     self.r_child = node.getRightChild()
-
 class avlTree(bstTree):
     def __init__(self, root: avlNode, treshold=1) -> None:
         self.root:avlNode = root
@@ -258,7 +253,8 @@ class avlTree(bstTree):
                 last_node = node
                 node = node.getLeftChild()
             else:
-                raise ValueError("This valuse is already present")
+                # raise ValueError("This valuse is already present")
+                return
         
         if val > last_node.getVal():
             last_node.setRightChild(avlNode(val))
@@ -331,8 +327,11 @@ class avlTree(bstTree):
             return avlNode(val)
         elif val < node.getVal():
             node.setLeftChild(self._insertHelper(node.getLeftChild(), val))
-        else:
+        elif val > node.getVal():
             node.setRightChild(self._insertHelper(node.getRightChild(), val))
+        else:
+            # raise ValueError("This valuse is already present")
+            return
 
         node.height = 1 + max(self.getHeight(node.getLeftChild()),
                            self.getHeight(node.getRightChild()))
