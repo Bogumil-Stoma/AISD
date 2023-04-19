@@ -6,7 +6,8 @@ def isHeap(l) -> bool:
     return all(l[i] <= l[(i - 1) // 2] for i in range(1, n))
 
 def test_isHeap():
-    assert(isHeap([10, 9, 6, 7, 8, 2, 5, 1, 4, 3]))
+    assert(isHeap([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
+    assert(isHeap([10, 9, 8, 8, 7, 6, 5, 4, 3, 2, 1]))
     assert(not isHeap([10, 9, 6, 7, 8, 2, 5, 8, 4, 3]))
 
 

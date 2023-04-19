@@ -6,8 +6,11 @@ def isHeap(l) -> bool:
     return all(l[i] <= l[(i - 1) // 3] for i in range(1, n))
 
 def test_isHeap():
-    assert(isHeap([10, 9, 6, 7, 8, 2, 5, 1, 4, 3]))
+    assert(isHeap([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
+    assert(isHeap([10, 9, 8, 8, 7, 6, 5, 4, 3, 2, 1]))
+    assert(isHeap([895, 871, 714, 880, 181, 565, 682, 273, 554, 704, 134, 316, 836, 73]))
     assert(not isHeap([10, 9, 6, 7, 8, 2, 5, 8, 4, 3]))
+    assert(not isHeap([895, 871, 714, 181, 880 , 565, 682, 273, 554, 704, 134, 316, 836, 73]))
 
 
 def test_threeAry_push_simple():
@@ -18,16 +21,15 @@ def test_threeAry_push_simple():
     heap.push(12)
     heap.push(100)
     heap.push(1)
-    # assert(heap.heap == [100, 30, 10, 2, 12, 1])
+    #assert(heap.heap == [100, 30, 10, 12, 2, 1])
     assert(isHeap(heap.heap))
 
 def test_threeAry_push_ordered():
     heap = threeAry()
     for i in range(1, 11):
         heap.push(i)
-    # heapified_list = [10, 9, 6, 7, 8, 2, 5, 1, 4, 3]
-    # assert(heap.heap == heapified_list)
     assert(isHeap(heap.heap))
+
 
 def test_threeAry_pop_ordered():
     heap = threeAry()
@@ -42,11 +44,14 @@ def test_threeAry_pop_ordered():
     #assert(p == 10)
 
 def test_threeAry_pop_unordered():
-    heap = threeAry()
-    for _ in range(1, 101):
-        heap.push(randint(0, 1000))
-    assert(isHeap(heap.heap))
-    for _ in range(0, 99):
-        heap.pop()
+    for __ in range(0, 100):
+        heap = threeAry()
+        for _ in range(1, 101):
+            heap.push(randint(0, 1000))
         assert(isHeap(heap.heap))
-    assert(len(heap.heap)==1)
+        for _ in range(0, 99):
+            heap.pop()
+            assert(isHeap(heap.heap))
+        assert(len(heap.heap)==1)
+   
+        
