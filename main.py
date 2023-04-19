@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 
 MAX_NUM_OF_NUMBERS = 100000
 RANGE_OF_NUMERS = 100000
-NUM_OF_ITERATIONS = 10
-INTERVAL = 1000
+NUM_OF_ITERATIONS = 3
+INTERVAL = 5000
 
 def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
                  iterations: int, numbers: int):
@@ -23,7 +23,7 @@ def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
         stop = time.process_time()
         if gc_old: gc.enable()
         sum_time += (stop-start)
-    return sum_time/iterations
+    return sum_time/iterations/len(range(numbers))
 
 def measure_time_pop(my_heap: twoAry | threeAry | fourAry, iterations: int, numbers: int):
     sum_time = 0
@@ -40,7 +40,7 @@ def measure_time_pop(my_heap: twoAry | threeAry | fourAry, iterations: int, numb
         stop = time.process_time()
         if gc_old: gc.enable()
         sum_time += (stop-start)
-    return sum_time/iterations
+    return sum_time/iterations/len(range(numbers))
 
 def main():
     heap_twoAry = twoAry()
@@ -53,14 +53,14 @@ def main():
     y_list_twoAry = []
     y_list_threeAry = []
     y_list_fourAry = []
-    
+
     for i in range(1000, MAX_NUM_OF_NUMBERS+1, INTERVAL):
         x_list.append(i)
         y_list_twoAry.append(measure_time_push(heap_twoAry, NUM_OF_ITERATIONS, i))
         y_list_threeAry.append(measure_time_push(heap_threeAry, NUM_OF_ITERATIONS, i))
         y_list_fourAry.append(measure_time_push(heap_fourAry, NUM_OF_ITERATIONS, i))
         print("\r Measuring PUSH. Progress: {0}/{1}".format(i/INTERVAL, MAX_NUM_OF_NUMBERS/INTERVAL), end='')
-    
+
     plt.figure(0)
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
@@ -81,7 +81,7 @@ def main():
         y_list_threeAry.append(measure_time_pop(heap_threeAry, NUM_OF_ITERATIONS, i))
         y_list_fourAry.append(measure_time_pop(heap_fourAry, NUM_OF_ITERATIONS, i))
         print("\r Measuring POP. Progress: {0}/{1}".format(i/INTERVAL, MAX_NUM_OF_NUMBERS/INTERVAL), end='')
-    
+
     plt.figure(1)
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
@@ -98,7 +98,7 @@ def main():
     print("\r Measurements complete")
     # for i in range(1, 11):
     #     heap_twoAry.push(i)
-    
+
     # for i in range(0, 9):
     #     heap_twoAry.pop()
     #     print(heap_twoAry.heap)
