@@ -48,7 +48,7 @@ def main():
     heap_threeAry = threeAry()
 
     heap_fourAry = fourAry()
-
+    #measuring push
     x_list = []
     y_list_twoAry = []
     y_list_threeAry = []
@@ -72,15 +72,21 @@ def main():
     plt.legend()
     plt.savefig('push.png')
 
+    #measuring pop
+    x_list = []
     y_list_twoAry = []
     y_list_threeAry = []
     y_list_fourAry = []
 
-    for i in x_list:
+    for i in range(1000, MAX_NUM_OF_NUMBERS+1, INTERVAL):
+        x_list.append(i)
         y_list_twoAry.append(measure_time_pop(heap_twoAry, NUM_OF_ITERATIONS, i))
         y_list_threeAry.append(measure_time_pop(heap_threeAry, NUM_OF_ITERATIONS, i))
         y_list_fourAry.append(measure_time_pop(heap_fourAry, NUM_OF_ITERATIONS, i))
         print("\r Measuring POP. Progress: {0}/{1}".format(i/INTERVAL, MAX_NUM_OF_NUMBERS/INTERVAL), end='')
+
+
+    print("\r Measurements complete           ")
 
     plt.figure(1)
     plt.ylabel('time[s]')
@@ -95,7 +101,7 @@ def main():
 
     plt.show()
 
-    print("\r Measurements complete")
+
     # for i in range(1, 11):
     #     heap_twoAry.push(i)
 
