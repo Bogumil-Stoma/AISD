@@ -53,5 +53,4 @@ def test_threeAry_pop_unordered():
             heap.pop()
             assert(isHeap(heap.heap))
         assert(len(heap.heap)==1)
-   
-        
+

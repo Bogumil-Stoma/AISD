@@ -23,8 +23,15 @@ class twoAry:
         i = 0
         j = 1
         while j < self.last:
-            if (j+1 < self.last) and (self.heap[j+1] > self.heap[j]):
-                j = j+1
+            if (j+1 < self.last):
+                t = j
+                maxH = self.heap[j]
+                for k in range(min(1,self.last-j-1)):
+
+                    if (self.heap[j+1+k] > self.heap[j+k] and self.heap[j+1+k] > maxH):
+                        maxH = self.heap[j+1+k]
+                        t = j+k+1
+                j = t
             if v >= self.heap[j]:
                 break
             self.heap[i] = self.heap[j]
@@ -75,17 +82,15 @@ class threeAry:
         i = 0
         j = 1
         while j < self.last:
-            if (j+2 < self.last):
-                maxH = self.heap[j]
+            if (j+1 < self.last):
                 t = j
-                for k in range(2):
+                maxH = self.heap[j]
+                for k in range(min(2,self.last-j-1)):
 
                     if (self.heap[j+1+k] > self.heap[j+k] and self.heap[j+1+k] > maxH):
                         maxH = self.heap[j+1+k]
                         t = j+k+1
                 j = t
-            elif (j+1 < self.last) and (self.heap[j+1] > self.heap[j]):
-                j = j+1
             if v >= self.heap[j]:
                 break
             self.heap[i] = self.heap[j]
@@ -116,27 +121,15 @@ class fourAry:
         i = 0
         j = 1
         while j < self.last:
-            if (j+3 < self.last):
-                maxH = self.heap[j]
+            if (j+1 < self.last):
                 t = j
-                for k in range(3):
+                maxH = self.heap[j]
+                for k in range(min(3,self.last-j-1)):
 
                     if (self.heap[j+1+k] > self.heap[j+k] and self.heap[j+1+k] > maxH):
                         maxH = self.heap[j+1+k]
                         t = j+k+1
                 j = t
-
-            elif (j+2 < self.last):
-                maxH = self.heap[j]
-                t = j
-                for k in range(2):
-
-                    if (self.heap[j+1+k] > self.heap[j+k] and self.heap[j+1+k] > maxH):
-                        maxH = self.heap[j+1+k]
-                        t = j+k+1
-                j = t
-            elif (j+1 < self.last) and (self.heap[j+1] > self.heap[j]):
-                j = j+1
             if v >= self.heap[j]:
                 break
             self.heap[i] = self.heap[j]
