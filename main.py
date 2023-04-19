@@ -4,9 +4,10 @@ import time
 import gc
 from matplotlib import pyplot as plt
 
-MAX_NUM_OF_NUMBERS = 10000
-RANGE_OF_NUMERS = 3000
+MAX_NUM_OF_NUMBERS = 100000
+RANGE_OF_NUMERS = 100000
 NUM_OF_ITERATIONS = 10
+INTERVAL = 1000
 
 def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
                  iterations: int, numbers: int):
@@ -53,15 +54,17 @@ def main():
     y_list_threeAry = []
     y_list_fourAry = []
     
-    for i in range(500, MAX_NUM_OF_NUMBERS+1, 500):
+    for i in range(1000, MAX_NUM_OF_NUMBERS+1, INTERVAL):
         x_list.append(i)
         y_list_twoAry.append(measure_time_push(heap_twoAry, NUM_OF_ITERATIONS, i))
         y_list_threeAry.append(measure_time_push(heap_threeAry, NUM_OF_ITERATIONS, i))
         y_list_fourAry.append(measure_time_push(heap_fourAry, NUM_OF_ITERATIONS, i))
+        print("\r Measuring PUSH. Progress: {0}/{1}".format(i/INTERVAL, MAX_NUM_OF_NUMBERS/INTERVAL), end='')
     
     plt.figure(0)
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
+    plt.xticks(x_list, minor=True)
     plt.plot(x_list, y_list_twoAry, label = 'twoAry')
     plt.plot(x_list, y_list_threeAry, label = 'threeAry')
     plt.plot(x_list, y_list_fourAry, label = 'fourAry')
@@ -69,29 +72,30 @@ def main():
     plt.legend()
     plt.savefig('push.png')
 
-    x_list = []
     y_list_twoAry = []
     y_list_threeAry = []
     y_list_fourAry = []
 
-    for i in range(500, MAX_NUM_OF_NUMBERS+1, 500):
-        x_list.append(i)
+    for i in x_list:
         y_list_twoAry.append(measure_time_pop(heap_twoAry, NUM_OF_ITERATIONS, i))
         y_list_threeAry.append(measure_time_pop(heap_threeAry, NUM_OF_ITERATIONS, i))
         y_list_fourAry.append(measure_time_pop(heap_fourAry, NUM_OF_ITERATIONS, i))
+        print("\r Measuring POP. Progress: {0}/{1}".format(i/INTERVAL, MAX_NUM_OF_NUMBERS/INTERVAL), end='')
     
     plt.figure(1)
     plt.ylabel('time[s]')
     plt.xlabel('num of words')
+    plt.xticks(x_list, minor=True)
     plt.plot(x_list, y_list_twoAry, label = 'twoAry')
     plt.plot(x_list, y_list_threeAry, label = 'threeAry')
-    plt.plot(x_list, y_list_fourAry, label = 'fourAry')
+    plt.plot(x_list, y_list_fourAry, label = 'fourAry', linestyle='dotted')
     plt.suptitle('POP')
     plt.legend()
     plt.savefig('pop.png')
 
     plt.show()
 
+    print("\r Measurements complete")
     # for i in range(1, 11):
     #     heap_twoAry.push(i)
     
