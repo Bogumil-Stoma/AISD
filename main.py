@@ -19,7 +19,7 @@ def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
         gc.disable()
         start = time.process_time()
         for __ in range(numbers):
-            my_heap.push(randint(0, RANGE_OF_NUMERS))
+            my_heap.push(randint(0, RANGE_OF_NUMERS*10))
         stop = time.process_time()
         if gc_old: gc.enable()
         sum_time += (stop-start)
@@ -54,7 +54,7 @@ def main():
     y_list_threeAry = []
     y_list_fourAry = []
 
-    for i in range(1000, MAX_NUM_OF_NUMBERS+1, INTERVAL):
+    for i in range(1000, MAX_NUM_OF_NUMBERS*10+1, INTERVAL*10):
         x_list.append(i)
         y_list_twoAry.append(measure_time_push(heap_twoAry, NUM_OF_ITERATIONS, i))
         y_list_threeAry.append(measure_time_push(heap_threeAry, NUM_OF_ITERATIONS, i))
