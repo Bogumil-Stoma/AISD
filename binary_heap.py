@@ -50,7 +50,7 @@ class twoAry:
         for i in range(self.last):
             text.append(str(self.heap[i]))
             if i == j:
-                res += '       '.join(text).center(50)
+                res += '       '.join(text).center(50)+'\n'+ '       '.join(['/  \\']*(2**(k-1))).center(50)
                 res += '\n'
                 text = []
                 j = 2**(k) + j
@@ -99,6 +99,27 @@ class threeAry:
         self.heap[i] = v
         return
 
+    def __str__(self):
+        return self.prepare_string()
+
+    def prepare_string(self):
+        j = 0
+        k = 1
+        text = []
+        res = ''
+        for i in range(self.last):
+            text.append(str(self.heap[i]))
+            if i == j:
+                res += '       '.join(text).center(50)+'\n'+ '       '.join(['/ | \\']*(3**(k-1))).center(50)
+                res += '\n'
+                text = []
+                j = 3**(k) + j
+                k+=1
+        res += '       '.join(text).center(10)
+        res += '\n'
+        text = []
+        return res
+
 class fourAry:
     def __init__(self):
         self.heap = []
@@ -137,3 +158,25 @@ class fourAry:
             j = 4*j + 1
         self.heap[i] = v
         return
+
+
+    def __str__(self):
+        return self.prepare_string()
+
+    def prepare_string(self):
+        j = 0
+        k = 1
+        text = []
+        res = ''
+        for i in range(self.last):
+            text.append(str(self.heap[i]))
+            if i == j:
+                res += '       '.join(text).center(100)+'\n'+ '       '.join(['/    /    \\    \\']*(4**(k-1))).center(100)
+                res += '\n'
+                text = []
+                j = 4**(k) + j
+                k+=1
+        res += '       '.join(text).center(10)
+        res += '\n'
+        text = []
+        return res
