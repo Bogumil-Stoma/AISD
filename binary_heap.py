@@ -18,6 +18,7 @@ class twoAry:
         return self.prepare_string()
 
     def pop(self):
+        first = self.heap[0]
         self.last -= 1
         v = self.heap.pop()
         i = 0
@@ -77,6 +78,7 @@ class threeAry:
         self.last += 1
 
     def pop(self):
+        first = self.heap[0]
         self.last -= 1
         v = self.heap.pop()
         i = 0
@@ -97,7 +99,7 @@ class threeAry:
             i = j
             j = 3*j + 1
         self.heap[i] = v
-        return
+        return first
 
     def __str__(self):
         return self.prepare_string()
@@ -137,6 +139,7 @@ class fourAry:
         self.last += 1
 
     def pop(self):
+        first = self.heap[0]
         self.last -= 1
         v = self.heap.pop()
         i = 0
@@ -157,23 +160,12 @@ class fourAry:
             i = j
             j = 4*j + 1
         self.heap[i] = v
-        return
+        return first
 
 
     def __str__(self):
         return self.prepare_string()
 
-                    if (self.heap[j+1+k] > self.heap[j+k] and self.heap[j+1+k] > maxH):
-                        maxH = self.heap[j+1+k]
-                        t = j+k+1
-                j = t
-            if v >= self.heap[j]:
-                break
-            self.heap[i] = self.heap[j]
-            i = j
-            j = 4*j + 1
-        self.heap[i] = v
-        return first
     def prepare_string(self):
         j = 0
         k = 1
