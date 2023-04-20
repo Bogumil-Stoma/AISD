@@ -19,6 +19,7 @@ class twoAry:
 
     def pop(self):
         self.last -= 1
+        first = self.heap[0]
         v = self.heap.pop()
         i = 0
         j = 1
@@ -38,7 +39,7 @@ class twoAry:
             i = j
             j = 2*j + 1
         self.heap[i] = v
-        return
+        return first
 
 
 
@@ -78,6 +79,7 @@ class threeAry:
 
     def pop(self):
         self.last -= 1
+        first = self.heap[0]
         v = self.heap.pop()
         i = 0
         j = 1
@@ -97,7 +99,7 @@ class threeAry:
             i = j
             j = 3*j + 1
         self.heap[i] = v
-        return
+        return first
 
 class fourAry:
     def __init__(self):
@@ -116,6 +118,8 @@ class fourAry:
         self.last += 1
 
     def pop(self):
+        first = self.heap[0]
+
         self.last -= 1
         v = self.heap.pop()
         i = 0
@@ -136,4 +140,4 @@ class fourAry:
             i = j
             j = 4*j + 1
         self.heap[i] = v
-        return
+        return first

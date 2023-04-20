@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 MAX_NUM_OF_NUMBERS = 100000
 RANGE_OF_NUMERS = 100000
-NUM_OF_ITERATIONS = 1
+NUM_OF_ITERATIONS = 3
 INTERVAL = 5000
 
 def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
@@ -14,14 +14,16 @@ def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
     sum_time_amortized = 0
     sum_time_average = 0
     for _ in range(iterations):
+        vals_list = []
+        for __ in range(numbers): vals_list.append(randint(0, RANGE_OF_NUMERS))
         my_heap.heap = []
         my_heap.last = 0
         gc_old = gc.isenabled()
         gc.disable()
         start_amortized = time.process_time()
-        for __ in range(numbers):
+        for i in range(numbers):
             start_average = time.process_time()
-            my_heap.push(randint(0, RANGE_OF_NUMERS))
+            my_heap.push(vals_list[i])
             stop_average = time.process_time()
             sum_time_average += (stop_average-start_average)
         stop_amortized = time.process_time()
@@ -29,7 +31,8 @@ def measure_time_push(my_heap: twoAry | threeAry | fourAry, \
         sum_time_amortized += (stop_amortized-start_amortized)
     return sum_time_amortized/iterations, sum_time_average/iterations/numbers
 
-def measure_time_pop(my_heap: twoAry | threeAry | fourAry, iterations: int, numbers: int):
+def measure_time_pop(my_heap: twoAry | threeAry | fourAry,\
+                      iterations: int, numbers: int):
     sum_time_amortized = 0
     sum_time_average = 0
     for _ in range(iterations):

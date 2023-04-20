@@ -38,10 +38,10 @@ def test_threeAry_pop_ordered():
     assert(isHeap(heap.heap))
     #nie działa dla range(0, 10)
     for _ in range(0, 9):
-        heap.pop()
+        p = heap.pop()
         assert(isHeap(heap.heap))
     assert(heap.heap == [1])
-    #assert(p == 10)
+    assert(p == 2)
 
 def test_threeAry_pop_unordered():
     for __ in range(0, 100):
