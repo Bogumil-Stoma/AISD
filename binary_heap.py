@@ -39,7 +39,7 @@ class twoAry:
             i = j
             j = 2*j + 1
         self.heap[i] = v
-        return
+        return first
 
 
 
