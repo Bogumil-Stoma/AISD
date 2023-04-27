@@ -3,26 +3,26 @@ from pattern_sarch import searchN, searchKMP, searchKR
 def simple(func):
     """Prosty test"""
     text = "AABBCCDDEEFFGGHHIIJJ"
-    assert(func("HH", text)==14)
-    assert(func("LL", text)==-1)
+    assert(func("HH", text)==[14])
+    assert(func("LL", text)==[])
 
 def empty(func):
         """Test z pustymi stringami"""
         text = "AABBCCDDEEFFGGHHIIJJ"
-        assert(func("", text)==-1)
-        assert(func("", "")==-1)
+        assert(func("", text)==[])
+        assert(func("", "")==[])
 
 def equal(func):
         """Test stringów równej długości"""
         text = "AABBCCDDEEFFGGHHIIJJ"
-        assert(func(text, text)==0)
-        assert(func("AAGGCCDDEEFFGGHHLLJJ", text)==-1)
+        assert(func(text, text)==[0])
+        assert(func("AAGGCCDDEEFFGGHHLLJJ", text)==[])
 
 def longer(func):
         """Test z dłuższym słowem niż tekstem"""
         text = "AABBCCDDEEFFGGHHIIJJ"
         word = "AABBCCDDEEFFGGHHIIJJKK"
-        assert(func(word, text)==-1)
+        assert(func(word, text)==[])
 
 class TestNaive:
     def test_simple(self):
