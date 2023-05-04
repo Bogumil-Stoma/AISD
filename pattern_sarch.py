@@ -12,10 +12,6 @@ def searchN(word: str, text: str) -> int | None:
             res.append(i)
     return res
 
-
-def searchKMP():
-    pass
-
 def KMPNext(pattern):
     KMPTable = [0]*len(pattern)
     KMPTable[0] = 0
@@ -34,10 +30,12 @@ def KMPNext(pattern):
                 i+=1
     return KMPTable
 
-def KMP(pattern, text):
+def searchKMP(pattern, text):
     pat_len = len(pattern)
     text_len = len(text)
     res = []
+    if pat_len==0 or text_len==0 or pat_len>text_len:
+        return res
 
     table = KMPNext(pattern)
     i, j = 0, 0
@@ -65,7 +63,7 @@ def KMP(pattern, text):
 
 
 
-def KR(pattern, text, diff_letters = 256, prime_number = 101):
+def searchKR(pattern, text, diff_letters = 256, prime_number = 101):
     pat_len = len(pattern)
     text_len = len(text)
     pat_hash = 0
@@ -88,8 +86,8 @@ def KR(pattern, text, diff_letters = 256, prime_number = 101):
             for j in range(pat_len):
                 if text[i+j] != pattern[j]:
                     break
-            if (j+1) == pat_len:
-                res.append(i)
+                if (j+1) == pat_len:
+                    res.append(i)
 
         if i < (text_len - pat_len):
             text_hash = (text_hash-text[i]*(2**(pat_len-1)))*2 + text_hash[i+pat_len]

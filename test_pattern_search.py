@@ -24,6 +24,12 @@ def longer(func):
         word = "AABBCCDDEEFFGGHHIIJJKK"
         assert(func(word, text)==[])
 
+def multiple(func):
+    """Test z wieloma wystąpnieniami"""
+    text = "AABBAACCDDEEFFGGHHAAIIJJ"
+    word = "AA"
+    assert(func(word, text)==[0, 4, 18])
+
 class TestNaive:
     def test_simple(self):
         simple(searchN)
@@ -36,6 +42,9 @@ class TestNaive:
 
     def test_longer(self):
         longer(searchN)
+    
+    def test_multiple(self):
+        multiple(searchN)
 
 
 class TestKMP:
@@ -50,6 +59,9 @@ class TestKMP:
 
     def test_longer(self):
         longer(searchKMP)
+    
+    def test_multiple(self):
+        multiple(searchKMP)
 
 class TestKR:
     def test_simple(self):
@@ -63,4 +75,7 @@ class TestKR:
 
     def test_longer(self):
         longer(searchKR)
+    
+    def test_multiple(self):
+        multiple(searchKR)
         
