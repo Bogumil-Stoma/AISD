@@ -40,6 +40,7 @@ def main():
         print("Measuring NAIVE. Progress: {0}/{1}".format(round(i/INTERVAL), round(MAX_NUM_OF_WORDS/INTERVAL)), end='\r')
         x_list.append(i)
         naive_list.append(measure_time(searchN, i, word_list, text))
+    print(end='\033[K')
     
     kmp_list = []
     for i in x_list:
