@@ -1,6 +1,6 @@
 
 
-def searchN(word: str, text: str) -> int | None:
+def searchN(word: str, text: str):
     w_len = len(word)
     t_len = len(text)
     res = []
@@ -13,8 +13,7 @@ def searchN(word: str, text: str) -> int | None:
     return res
 
 
-def searchKMP():
-    pass
+
 
 def KMPNext(pattern):
     KMPTable = [0]*len(pattern)
@@ -34,7 +33,7 @@ def KMPNext(pattern):
                 i+=1
     return KMPTable
 
-def KMP(pattern, text):
+def searchKMP(pattern, text):
     pat_len = len(pattern)
     text_len = len(text)
     res = []
@@ -65,7 +64,7 @@ def KMP(pattern, text):
 
 
 
-def KR(pattern, text, diff_letters = 256, prime_number = 101):
+def searchKR(pattern, text, diff_letters = 256, prime_number = 101):
     pat_len = len(pattern)
     text_len = len(text)
     pat_hash = 0
@@ -77,8 +76,8 @@ def KR(pattern, text, diff_letters = 256, prime_number = 101):
         h = (h*diff_letters) % prime_number
 
     for i in range(pat_len):
-        pat_hash = pattern[i]*(2**(pat_len-i-1))+pat_hash
-        text_hash = pattern[i]*(2**(text_len-i-1))+text_hash
+        pat_hash = ord(pattern[i])*(2**(pat_len-i-1))+pat_hash
+        text_hash = ord(text[i])*(2**(pat_len-i-1))+text_hash
 
         '''pat_hash = (diff_letters * pat_hash + ord(pattern[i])) % prime_number
         text_hash = (diff_letters * text_hash + ord(text[i])) % prime_number'''
@@ -92,7 +91,7 @@ def KR(pattern, text, diff_letters = 256, prime_number = 101):
                 res.append(i)
 
         if i < (text_len - pat_len):
-            text_hash = (text_hash-text[i]*(2**(pat_len-1)))*2 + text_hash[i+pat_len]
+            text_hash = (text_hash-ord(text[i])*(2**(pat_len-1)))*2 + ord(text[i+pat_len])
             '''text_hash = (diff_letters*(text_hash-ord(text[i])*h) + ord(text[i+pat_len])) % prime_number
             if text_hash < 0:
                 text_hash += prime_number'''
