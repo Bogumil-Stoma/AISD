@@ -64,10 +64,15 @@ def searchKMP(pattern, text):
 def searchKR(pattern, text, diff_letters = 256, prime_number = 101):
     pat_len = len(pattern)
     text_len = len(text)
+    res = []
+
+    if pat_len==0 or text_len==0 or pat_len>text_len:
+        return res
+    
     pat_hash = 0
     text_hash = 0
     h = 1
-    res = []
+    
 
     for i in range(pat_len-1):
         h = (h*diff_letters) % prime_number
