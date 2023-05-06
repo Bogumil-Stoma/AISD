@@ -47,10 +47,10 @@ def main():
         print("Measuring KMP. Progress: {0}/{1}".format(round(i/INTERVAL), round(MAX_NUM_OF_WORDS/INTERVAL)), end='\r')
         kmp_list.append(measure_time(searchKMP, i, word_list, text))
     
-    # kr_list = []
-    # for i in x_list:
-    #     print("Measuring KMP. Progress: {0}/{1}".format(round(i/INTERVAL), round(MAX_NUM_OF_WORDS/INTERVAL)), end='\r')
-    #     kr_list.append(measure_time(searchKR, i, word_list, text))
+    kr_list = []
+    for i in x_list:
+        print("Measuring KMP. Progress: {0}/{1}".format(round(i/INTERVAL), round(MAX_NUM_OF_WORDS/INTERVAL)), end='\r')
+        kr_list.append(measure_time(searchKR, i, word_list, text))
     
     
     print(end='\033[K')
@@ -63,7 +63,7 @@ def main():
 
     plt.plot(x_list, naive_list, label="Naive")
     plt.plot(x_list, kmp_list, label="KMP")
-    # plt.plot(x_list, kr_list, label="KR")
+    plt.plot(x_list, kr_list, label="KR")
     
     plt.legend()
     plt.savefig('pattern_search.png')
