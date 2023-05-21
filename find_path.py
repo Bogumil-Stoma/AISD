@@ -2,14 +2,16 @@ class Graph:
     def __init__(self):
         self.n: int = 0
         self.vertices: list[Vertice] = []
+        self.startIndex: int = 0
 
-    def readFile(self, file):
+    def ReadFile(self, file):
         verticesTMP = []
         with open(file, 'r') as fp:
             for line in fp:
                 verticesTMP.extend(list(line.strip()))
             self.n = len(line.strip())
         n = self.n
+        verticesTMP = list(map(int, verticesTMP))
         for i, ver in enumerate(verticesTMP):
             if i < n*n-n: down = (i+n, verticesTMP[i+n])
             else: down = None
@@ -20,6 +22,10 @@ class Graph:
             if i%n==(n-1): right =None
             else: right = (i+1, verticesTMP[i+1])
             self.vertices.append(Vertice(up, down, left, right))
+            if ver == 0:
+                self.startIndex = i
+
+
 
 class Vertice:
     '''
@@ -33,5 +39,6 @@ class Vertice:
         self.right: tuple[int,int] = right
 
 elo = Graph()
-elo.readFile('plansza.txt')
+elo.ReadFile('plansza.txt')
+print(elo.startIndex)
 print(':)')
