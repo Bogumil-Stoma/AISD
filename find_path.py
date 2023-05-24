@@ -118,7 +118,10 @@ class Graph:
             unvisited.remove(current_vertex_index)
 
         print(visited)
-        print(vertex_table)
+        for i in range(len(vertex_table)):
+            print(vertex_table[i], end='')
+            if (i+1)%6==0:
+                print()
         return(visited)
 
 
