@@ -66,23 +66,51 @@ class Graph:
             
             current_vertex = self.vertices[current_vertex_index]
             if current_vertex.up is not None:
-                # vertex_table[current_vertex.up[0]][0] = current_vertex.up[1]
-                vertex_table[current_vertex.up[0]][1] = current_vertex_index
+                if vertex_table[current_vertex.up[0]][0] is not None:
+                    a = vertex_table[current_vertex.up[0]][0] + current_vertex.up[1]
+                    if a < vertex_table[current_vertex.up[0]][0]: 
+                        vertex_table[current_vertex.up[0]][0] = a
+                        vertex_table[current_vertex.up[0]][1] = current_vertex_index
+                else:
+                    vertex_table[current_vertex.up[0]][0] = current_vertex.up[1]
+                    vertex_table[current_vertex.up[0]][1] = current_vertex_index
+
                 if current_vertex.up[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.up[0])
 
             if current_vertex.down is not None:
-                # vertex_table[current_vertex.down[0]][0] = current_vertex.down[1]
-                vertex_table[current_vertex.down[0]][1] = current_vertex_index
+                if vertex_table[current_vertex.down[0]][0] is not None:
+                    a = vertex_table[current_vertex.down[0]][0] + current_vertex.down[1]
+                    if a < vertex_table[current_vertex.down[0]][0]: 
+                        vertex_table[current_vertex.down[0]][0] = a
+                        vertex_table[current_vertex.down[0]][1] = current_vertex_index
+                else:
+                    vertex_table[current_vertex.down[0]][0] = current_vertex.down[1]
+                    vertex_table[current_vertex.down[0]][1] = current_vertex_index
+                
                 if current_vertex.down[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.down[0])
                 
             if current_vertex.left is not None:
-                # vertex_table[current_vertex.left[0]][0] = current_vertex.left[1]
-                vertex_table[current_vertex.left[0]][1] = current_vertex_index
+                if vertex_table[current_vertex.left[0]][0] is not None:
+                    a = vertex_table[current_vertex.left[0]][0] + current_vertex.left[1]
+                    if a < vertex_table[current_vertex.left[0]][0]: 
+                        vertex_table[current_vertex.left[0]][0] = a
+                        vertex_table[current_vertex.left[0]][1] = current_vertex_index
+                else:
+                    vertex_table[current_vertex.left[0]][0] = current_vertex.left[1]
+                    vertex_table[current_vertex.left[0]][1] = current_vertex_index
+                
                 if current_vertex.left[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.left[0])
             
             if current_vertex.right is not None:
-                # vertex_table[current_vertex.right[0]][0] = current_vertex.right[1]
-                vertex_table[current_vertex.right[0]][1] = current_vertex_index
+                if vertex_table[current_vertex.right[0]][0] is not None:
+                    a = vertex_table[current_vertex.right[0]][0] + current_vertex.right[1]
+                    if a < vertex_table[current_vertex.right[0]][0]: 
+                        vertex_table[current_vertex.right[0]][0] = a
+                        vertex_table[current_vertex.right[0]][1] = current_vertex_index
+                else:
+                    vertex_table[current_vertex.right[0]][0] = current_vertex.right[1]
+                    vertex_table[current_vertex.right[0]][1] = current_vertex_index
+                
                 if current_vertex.right[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.right[0])
             
             
@@ -90,6 +118,7 @@ class Graph:
             unvisited.remove(current_vertex_index)
 
         print(visited)
+        print(vertex_table)
         return(visited)
 
 
