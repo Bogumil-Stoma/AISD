@@ -36,164 +36,78 @@ class Graph:
                 left = (i-1, verticesTMP[i-1])
                 vertices2[i][i-1] = verticesTMP[i-1]
             if i%n==(n-1): right =None
-            else:
-                right = (i+1, verticesTMP[i+1])
-                vertices2[i][i+1] = verticesTMP[i+1]
-            self.vertices.append(Vertice(up, down, left, right))
+            else: right = (i+1, verticesTMP[i+1])
+            self.vertices.append(Vertice(up, down, left, right, ver))
             if ver == 0:
                 if self.startIndex is None: self.startIndex = i
                 else: self.destIndex = i
-        self.justVertices = verticesTMP
-        self.vertices = vertices2
-
-    def FindPath(self, src):
+            
+    def FindPath(self):
         visited : list[int] = []
         unvisited : list[int] = [i for i in range(len(self.vertices))]
-        #  to_visit_queue : list[int] = []
-        vertex_table = [[None, None] for _ in self.vertices]
-        # print(vertex_table)
-        # current_vertex : Vertice = self.vertices[self.startIndex]
-        # vertex_table[self.startIndex][0] = 0
-        # if current_vertex.up is not None:
-        #     vertex_table[current_vertex.up[0]][0] = current_vertex.up[1]
-        #     vertex_table[current_vertex.up[0]][1] = self.startIndex
-        #     # to_visit_queue.insert(0, current_vertex.up[0])
+        vertex_table = [[float('inf'), None] for _ in self.vertices]
 
-        # if current_vertex.down is not None:
-        #     vertex_table[current_vertex.down[0]][0] = current_vertex.down[1]
-        #     vertex_table[current_vertex.down[0]][1] = self.startIndex
-        #     # to_visit_queue.insert(0, current_vertex.down[0])
-
-        # if current_vertex.left is not None:
-        #     vertex_table[current_vertex.left[0]][0] = current_vertex.left[1]
-        #     vertex_table[current_vertex.left[0]][1] = self.startIndex
-        #     # to_visit_queue.insert(0, current_vertex.left[0])
-
-        # if current_vertex.right is not None:
-        #     vertex_table[current_vertex.right[0]][0] = current_vertex.right[1]
-        #     vertex_table[current_vertex.right[0]][1] = self.startIndex
-            # to_visit_queue.insert(0, current_vertex.right[0])
-
-        # visited.append(self.startIndex)
-        # unvisited.remove(self.startIndex)
 
         vertex_table[self.startIndex][0] = 0
+        vertex_table[self.startIndex][1] = self.startIndex
 
-        # prev_vertex_index = self.startIndex
-        current_vertex = self.startIndex
         while unvisited:
-            # current_vertex = None
+            # finding vertex with smallest cost
+            current_vertex_index = unvisited[0]
+            for vertex_index in unvisited:
+                if vertex_table[vertex_index][0] < vertex_table[current_vertex_index][0]:
+                    current_vertex_index = vertex_index
+            
+            current_vertex = self.vertices[current_vertex_index]
+            
+            if current_vertex.up is not None:
+                neighbor_index = current_vertex.up[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.up[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+            
+            if current_vertex.down is not None:
+                neighbor_index = current_vertex.down[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.down[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
 
-            for vertex in unvisited:
-                if vertex_table[vertex][0] is not None:
-                    if vertex_table[current_vertex][0] is not None:
-                        if vertex_table[vertex][0] < vertex_table[current_vertex][0]:
-                            current_vertex = vertex
+            if current_vertex.left is not None:
+                neighbor_index = current_vertex.left[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.left[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
 
-            if self.vertices[current_vertex].up is not None:
-                if vertex_table[self.vertices[current_vertex].up[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].up[0]][0] + self.vertices[current_vertex].up[1]
-                    if a < vertex_table[self.vertices[current_vertex].up[0]][0]:
-                        vertex_table[self.vertices[current_vertex].up[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
-                    else:
-                        vertex_table[self.vertices[current_vertex].up[0]][0] = self.vertices[current_vertex].up[1]
-                        vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
+            if current_vertex.right is not None:
+                neighbor_index = current_vertex.right[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.right[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+            
+            visited.append(current_vertex_index)
+            unvisited.remove(current_vertex_index)
 
-            if self.vertices[current_vertex].down is not None:
-                if vertex_table[self.vertices[current_vertex].down[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].down[0]][0] + self.vertices[current_vertex].down[1]
-                    if a < vertex_table[self.vertices[current_vertex].down[0]][0]:
-                        vertex_table[self.vertices[current_vertex].down[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
-                else:
-                    vertex_table[self.vertices[current_vertex].down[0]][0] = self.vertices[current_vertex].down[1]
-                    vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
+        board = ["_" for _ in self.vertices]
 
+        board[self.startIndex] = '0'
+        board[self.destIndex] = '0'
 
-            if self.vertices[current_vertex].left is not None:
-                if vertex_table[self.vertices[current_vertex].left[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].left[0]][0] + self.vertices[current_vertex].left[1]
-                    if a < vertex_table[self.vertices[current_vertex].left[0]][0]:
-                        vertex_table[self.vertices[current_vertex].left[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
-                    else:
-                        vertex_table[self.vertices[current_vertex].left[0]][0] = self.vertices[current_vertex].left[1]
-                        vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
+        current_vertex_index = vertex_table[self.destIndex][1]
+        while current_vertex_index != self.startIndex:
+            board[current_vertex_index] = str(self.vertices[current_vertex_index].cost)
+            current_vertex_index = vertex_table[current_vertex_index][1]
+        
+        y = 0
+        for i in range(len(board)):
+            if (i+1)%self.n==0:
+                board.insert(i+y+1, "\n")
+                y += 1
 
-            if self.vertices[current_vertex].right is not None:
-                if vertex_table[self.vertices[current_vertex].right[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].right[0]][0] + self.vertices[current_vertex].right[1]
-                    if a < vertex_table[self.vertices[current_vertex].right[0]][0]:
-                        vertex_table[self.vertices[current_vertex].right[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
-                    else:
-                        vertex_table[self.vertices[current_vertex].right[0]][0] = self.vertices[current_vertex].right[1]
-                        vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
-
-
-
-
-
-            # current_vertex = self.vertices[current_vertex_index]
-            # if current_vertex.up is not None:
-            #     if vertex_table[current_vertex.up[0]][0] is not None:
-            #         a = vertex_table[current_vertex.up[0]][0] + current_vertex.up[1]
-            #         if a < vertex_table[current_vertex.up[0]][0]:
-            #             vertex_table[current_vertex.up[0]][0] = a
-            #             vertex_table[current_vertex.up[0]][1] = current_vertex_index
-            #     else:
-            #         vertex_table[current_vertex.up[0]][0] = current_vertex.up[1]
-            #         vertex_table[current_vertex.up[0]][1] = current_vertex_index
-
-            #     if current_vertex.up[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.up[0])
-
-            # if current_vertex.down is not None:
-            #     if vertex_table[current_vertex.down[0]][0] is not None:
-            #         a = vertex_table[current_vertex.down[0]][0] + current_vertex.down[1]
-            #         if a < vertex_table[current_vertex.down[0]][0]:
-            #             vertex_table[current_vertex.down[0]][0] = a
-            #             vertex_table[current_vertex.down[0]][1] = current_vertex_index
-            #     else:
-            #         vertex_table[current_vertex.down[0]][0] = current_vertex.down[1]
-            #         vertex_table[current_vertex.down[0]][1] = current_vertex_index
-
-            #     if current_vertex.down[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.down[0])
-
-            # if current_vertex.left is not None:
-            #     if vertex_table[current_vertex.left[0]][0] is not None:
-            #         a = vertex_table[current_vertex.left[0]][0] + current_vertex.left[1]
-            #         if a < vertex_table[current_vertex.left[0]][0]:
-            #             vertex_table[current_vertex.left[0]][0] = a
-            #             vertex_table[current_vertex.left[0]][1] = current_vertex_index
-            #     else:
-            #         vertex_table[current_vertex.left[0]][0] = current_vertex.left[1]
-            #         vertex_table[current_vertex.left[0]][1] = current_vertex_index
-
-            #     if current_vertex.left[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.left[0])
-
-            # if current_vertex.right is not None:
-            #     if vertex_table[current_vertex.right[0]][0] is not None:
-            #         a = vertex_table[current_vertex.right[0]][0] + current_vertex.right[1]
-            #         if a < vertex_table[current_vertex.right[0]][0]:
-            #             vertex_table[current_vertex.right[0]][0] = a
-            #             vertex_table[current_vertex.right[0]][1] = current_vertex_index
-            #     else:
-            #         vertex_table[current_vertex.right[0]][0] = current_vertex.right[1]
-            #         vertex_table[current_vertex.right[0]][1] = current_vertex_index
-
-            #     if current_vertex.right[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.right[0])
-
-
-            visited.append(current_vertex)
-            unvisited.remove(current_vertex)
-
-        print(visited)
-        for i in range(len(vertex_table)):
-            print(vertex_table[i], end='')
-            if (i+1)%6==0:
-                print()
-        return(visited)
+        return visited, "".join(board)
 
 
 
@@ -242,11 +156,11 @@ class Vertice:
     '''
     Stores vertice with possible connections, where connection(eg. up) is in form (INDEX, COST)
     '''
-    def __init__(self, up, down,
-                  left, right):
+    def __init__(self, up: tuple[int,int], down: tuple[int,int],
+                  left: tuple[int,int], right: tuple[int,int], cost):
         self.up: tuple[int,int] = up
         self.down: tuple[int,int] = down
         self.left: tuple[int,int] = left
         self.right: tuple[int,int] = right
-
+        self.cost : int = cost
 
