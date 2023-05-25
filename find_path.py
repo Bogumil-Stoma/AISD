@@ -1,4 +1,4 @@
-from sys import maxsize
+# from sys import maxsize
 
 class Graph:
     def __init__(self):
@@ -24,15 +24,16 @@ class Graph:
             else: left = (i-1, verticesTMP[i-1])
             if i%n==(n-1): right =None
             else: right = (i+1, verticesTMP[i+1])
-            self.vertices.append(Vertice(up, down, left, right))
+            self.vertices.append(Vertice(up, down, left, right, ver))
             if ver == 0:
                 if self.startIndex is None: self.startIndex = i
                 else: self.destIndex = i
             
-    def FindPath(self, destnation):
+            
+    def FindPath(self):
         visited : list[int] = []
         unvisited : list[int] = [i for i in range(len(self.vertices))]
-        vertex_table = [[maxsize, None] for _ in self.vertices]
+        vertex_table = [[float('inf'), None] for _ in self.vertices]
 
 
         vertex_table[self.startIndex][0] = 0
@@ -78,33 +79,22 @@ class Graph:
             visited.append(current_vertex_index)
             unvisited.remove(current_vertex_index)
 
-        board = ["X" for _ in self.vertices]
+        board = ["_" for _ in self.vertices]
 
-        for i in range(len(board)):
-            print(board[i], end='')
-            if (i+1)%6==0:
-                print()
 
         board[self.startIndex] = 0
         board[self.destIndex] = 0
-        print("---------------------------------------")
 
         current_vertex_index = vertex_table[self.destIndex][1]
         while current_vertex_index != self.startIndex:
-            board[current_vertex_index] = vertex_table[current_vertex_index][0]
+            board[current_vertex_index] = self.vertices[current_vertex_index].cost
             current_vertex_index = vertex_table[current_vertex_index][1]
         
         for i in range(len(board)):
             print(board[i], end='')
-            if (i+1)%6==0:
+            if (i+1)%self.n==0:
                 print()
 
-
-        print(visited)
-        for i in range(len(vertex_table)):
-            print(i, vertex_table[i], end='')
-            if (i+1)%6==0:
-                print()
         return(visited)
 
 
@@ -114,18 +104,30 @@ class Vertice:
     Stores vertice with possible connections, where connection(eg. up) is in form (INDEX, COST)
     '''
     def __init__(self, up: tuple[int,int], down: tuple[int,int],
-                  left: tuple[int,int], right: tuple[int,int]):
+                  left: tuple[int,int], right: tuple[int,int], cost):
         self.up: tuple[int,int] = up
         self.down: tuple[int,int] = down
         self.left: tuple[int,int] = left
         self.right: tuple[int,int] = right
+        self.cost: int = cost
 
 elo = Graph()
 elo.ReadFile('plansza.txt')
-print(elo.startIndex)
-print(elo.destIndex)
-for i in elo.vertices:
-    print(i.up, i.down, i.left, i.right)
-print(elo.startIndex)
-elo.FindPath(4)
+elo.FindPath()
+print()
+elo = Graph()
+elo.ReadFile('plansza1.txt')
+elo.FindPath()
+print()
+elo = Graph()
+elo.ReadFile('plansza2.txt')
+elo.FindPath()
+print()
+elo = Graph()
+elo.ReadFile('plansza3.txt')
+elo.FindPath()
+print()
+elo = Graph()
+elo.ReadFile('plansza5.txt')
+elo.FindPath()
 print(':)')
