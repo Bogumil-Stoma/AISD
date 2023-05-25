@@ -1,4 +1,4 @@
-from copy import deepcopy
+from sys import maxsize
 
 class Graph:
     def __init__(self):
@@ -33,7 +33,7 @@ class Graph:
         visited : list[int] = []
         unvisited : list[int] = [i for i in range(len(self.vertices))]
         #  to_visit_queue : list[int] = []
-        vertex_table = [[None, None] for _ in self.vertices]
+        vertex_table = [[maxsize, None] for _ in self.vertices]
         # print(vertex_table)
         # current_vertex : Vertice = self.vertices[self.startIndex]
         # vertex_table[self.startIndex][0] = 0
@@ -63,56 +63,87 @@ class Graph:
         vertex_table[self.startIndex][0] = 0
 
         # prev_vertex_index = self.startIndex
-        current_vertex = self.startIndex
+        # current_vertex_index = self.startIndex
         while unvisited:
-            # current_vertex = None
-
-            for vertex in unvisited:
-                if vertex_table[vertex][0] is not None:
-                    if vertex_table[current_vertex][0] is not None:
-                        if vertex_table[vertex][0] < vertex_table[current_vertex][0]:
-                            current_vertex = vertex
-
-            if self.vertices[current_vertex].up is not None:
-                if vertex_table[self.vertices[current_vertex].up[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].up[0]][0] + self.vertices[current_vertex].up[1]
-                    if a < vertex_table[self.vertices[current_vertex].up[0]][0]:
-                        vertex_table[self.vertices[current_vertex].up[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
-                    else: 
-                        vertex_table[self.vertices[current_vertex].up[0]][0] = self.vertices[current_vertex].up[1]
-                        vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
+            # finding vertex with smallest cost
+            current_vertex_index = unvisited[0]
+            for vertex_index in unvisited:
+                if vertex_table[vertex_index][0] < vertex_table[current_vertex_index][0]:
+                    current_vertex_index = vertex_index
             
-            if self.vertices[current_vertex].down is not None:
-                if vertex_table[self.vertices[current_vertex].down[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].down[0]][0] + self.vertices[current_vertex].down[1]
-                    if a < vertex_table[self.vertices[current_vertex].down[0]][0]:
-                        vertex_table[self.vertices[current_vertex].down[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
-                else: 
-                    vertex_table[self.vertices[current_vertex].down[0]][0] = self.vertices[current_vertex].down[1]
-                    vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
+            current_vertex = self.vertices[current_vertex_index]
+            
+            if current_vertex.up is not None:
+                neighbor_index = current_vertex.up[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.up[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+            
+            if current_vertex.down is not None:
+                neighbor_index = current_vertex.down[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.down[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+
+            if current_vertex.left is not None:
+                neighbor_index = current_vertex.left[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.left[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+
+            if current_vertex.right is not None:
+                neighbor_index = current_vertex.right[0]
+                a = vertex_table[current_vertex_index][0] + current_vertex.right[1]
+                if a < vertex_table[neighbor_index][0]:
+                    vertex_table[neighbor_index][0] = a
+                    vertex_table[neighbor_index][1] = current_vertex_index
+           
+           
+           
+           
+            # if self.vertices[current_vertex].up is not None:
+            #     if vertex_table[self.vertices[current_vertex].up[0]][0] is not None:
+            #         a = vertex_table[self.vertices[current_vertex].up[0]][0] + self.vertices[current_vertex].up[1]
+            #         if a < vertex_table[self.vertices[current_vertex].up[0]][0]:
+            #             vertex_table[self.vertices[current_vertex].up[0]][0] = a
+            #             vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
+            #         else: 
+            #             vertex_table[self.vertices[current_vertex].up[0]][0] = self.vertices[current_vertex].up[1]
+            #             vertex_table[self.vertices[current_vertex].up[0]][1] = current_vertex
+            
+            # if self.vertices[current_vertex].down is not None:
+            #     if vertex_table[self.vertices[current_vertex].down[0]][0] is not None:
+            #         a = vertex_table[self.vertices[current_vertex].down[0]][0] + self.vertices[current_vertex].down[1]
+            #         if a < vertex_table[self.vertices[current_vertex].down[0]][0]:
+            #             vertex_table[self.vertices[current_vertex].down[0]][0] = a
+            #             vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
+            #     else: 
+            #         vertex_table[self.vertices[current_vertex].down[0]][0] = self.vertices[current_vertex].down[1]
+            #         vertex_table[self.vertices[current_vertex].down[0]][1] = current_vertex
             
 
-            if self.vertices[current_vertex].left is not None:
-                if vertex_table[self.vertices[current_vertex].left[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].left[0]][0] + self.vertices[current_vertex].left[1]
-                    if a < vertex_table[self.vertices[current_vertex].left[0]][0]:
-                        vertex_table[self.vertices[current_vertex].left[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
-                    else: 
-                        vertex_table[self.vertices[current_vertex].left[0]][0] = self.vertices[current_vertex].left[1]
-                        vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
+            # if self.vertices[current_vertex].left is not None:
+            #     if vertex_table[self.vertices[current_vertex].left[0]][0] is not None:
+            #         a = vertex_table[self.vertices[current_vertex].left[0]][0] + self.vertices[current_vertex].left[1]
+            #         if a < vertex_table[self.vertices[current_vertex].left[0]][0]:
+            #             vertex_table[self.vertices[current_vertex].left[0]][0] = a
+            #             vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
+            #         else: 
+            #             vertex_table[self.vertices[current_vertex].left[0]][0] = self.vertices[current_vertex].left[1]
+            #             vertex_table[self.vertices[current_vertex].left[0]][1] = current_vertex
                     
-            if self.vertices[current_vertex].right is not None:
-                if vertex_table[self.vertices[current_vertex].right[0]][0] is not None:
-                    a = vertex_table[self.vertices[current_vertex].right[0]][0] + self.vertices[current_vertex].right[1]
-                    if a < vertex_table[self.vertices[current_vertex].right[0]][0]:
-                        vertex_table[self.vertices[current_vertex].right[0]][0] = a
-                        vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
-                    else: 
-                        vertex_table[self.vertices[current_vertex].right[0]][0] = self.vertices[current_vertex].right[1]
-                        vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
+            # if self.vertices[current_vertex].right is not None:
+            #     if vertex_table[self.vertices[current_vertex].right[0]][0] is not None:
+            #         a = vertex_table[self.vertices[current_vertex].right[0]][0] + self.vertices[current_vertex].right[1]
+            #         if a < vertex_table[self.vertices[current_vertex].right[0]][0]:
+            #             vertex_table[self.vertices[current_vertex].right[0]][0] = a
+            #             vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
+            #         else: 
+            #             vertex_table[self.vertices[current_vertex].right[0]][0] = self.vertices[current_vertex].right[1]
+            #             vertex_table[self.vertices[current_vertex].right[0]][1] = current_vertex
                     
                     
 
@@ -168,8 +199,8 @@ class Graph:
             #     if current_vertex.right[0] not in to_visit_queue+visited: to_visit_queue.insert(0, current_vertex.right[0])
             
             
-            visited.append(current_vertex)
-            unvisited.remove(current_vertex)
+            visited.append(current_vertex_index)
+            unvisited.remove(current_vertex_index)
 
         print(visited)
         for i in range(len(vertex_table)):
