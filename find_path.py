@@ -202,7 +202,7 @@ class Graph:
         distances[start] = [0,0]
 
         queue = [(0, start)]
-        while queue:
+        while queue: 
             curDistance, curVertex = heappop(queue)
             if curDistance > distances[curVertex][0]:
                 continue
