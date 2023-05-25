@@ -10,7 +10,7 @@ class Graph:
         self.startIndex: int = None
         self.destIndex: int = None
 
-    def ReadFile(self, file):
+    def ReadFile1(self, file):
         verticesTMP = []
         with open(file, 'r') as fp:
             for line in fp:
@@ -41,6 +41,43 @@ class Graph:
             if ver == 0:
                 if self.startIndex is None: self.startIndex = i
                 else: self.destIndex = i
+        
+    def ReadFile2(self, file):
+        verticesTMP = []
+        with open(file, 'r') as fp:
+            for line in fp:
+                verticesTMP.extend(list(line.strip()))
+            self.n = len(line.strip())
+        n = self.n
+        verticesTMP = list(map(int, verticesTMP))
+        vertices2 = dict()
+        for i, ver in enumerate(verticesTMP):
+            vertices2[i] = dict()
+            if i < n*n-n:
+                down = (i+n, verticesTMP[i+n])
+                vertices2[i][i+n] = verticesTMP[i+n]
+            else:
+                down = None
+
+            if i >= n:
+                up = (i-n, verticesTMP[i-n])
+                vertices2[i][i-n] = verticesTMP[i-n]
+            else: up = None
+            if i%n==0: left = None
+            else:
+                left = (i-1, verticesTMP[i-1])
+                vertices2[i][i-1] = verticesTMP[i-1]
+            if i%n==(n-1): right =None
+            else:
+                right = (i+1, verticesTMP[i+1])
+                vertices2[i][i+1] = verticesTMP[i+1]
+            self.vertices.append(Vertice(up, down, left, right, ver))
+            if ver == 0:
+                if self.startIndex is None: self.startIndex = i
+                else: self.destIndex = i
+        self.justVertices = verticesTMP
+        self.vertices = vertices2
+
             
     def FindPath(self):
         visited : list[int] = []
@@ -111,7 +148,7 @@ class Graph:
 
 
 
-    def FindShortesPath2(self, start, dest):
+    def FindShortestPath2(self, start, dest):
         distances = {vertex: [sys.maxsize, 0] for vertex in self.vertices}
         distances[start] = [0,0]
 
@@ -135,7 +172,7 @@ class Graph:
         return path
 
     def PrintGraph(self):
-        dis = self.FindShortesPath2(self.startIndex, self.destIndex)
+        dis = self.FindShortestPath2(self.startIndex, self.destIndex)
         for i in range(self.n*self.n):
             if i%self.n == 0:
                 print()
@@ -145,12 +182,12 @@ class Graph:
                 print('.', end='')
         print()
 
-    def printNormal(self):
-        for i in range(self.n*self.n):
-            if i%self.n == 0:
-                print()
-            print(self.justVertices[i], end='')
-        print()
+    # def printNormal(self):
+    #     for i in range(self.n*self.n):
+    #         if i%self.n == 0:
+    #             print()
+    #         print(self.justVertices[i], end='')
+    #     print()
 
 class Vertice:
     '''
