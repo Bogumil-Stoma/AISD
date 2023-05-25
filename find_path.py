@@ -102,7 +102,7 @@ class Graph:
 
         print(visited)
         for i in range(len(vertex_table)):
-            print(vertex_table[i], end='')
+            print(i, vertex_table[i], end='')
             if (i+1)%6==0:
                 print()
         return(visited)
@@ -122,6 +122,10 @@ class Vertice:
 
 elo = Graph()
 elo.ReadFile('plansza.txt')
+print(elo.startIndex)
+print(elo.destIndex)
+for i in elo.vertices:
+    print(i.up, i.down, i.left, i.right)
 print(elo.startIndex)
 elo.FindPath(4)
 print(':)')
