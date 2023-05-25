@@ -1,5 +1,3 @@
-# from sys import maxsize
-
 class Graph:
     def __init__(self):
         self.n: int = 0
@@ -28,7 +26,6 @@ class Graph:
             if ver == 0:
                 if self.startIndex is None: self.startIndex = i
                 else: self.destIndex = i
-            
             
     def FindPath(self):
         visited : list[int] = []
@@ -81,21 +78,21 @@ class Graph:
 
         board = ["_" for _ in self.vertices]
 
-
-        board[self.startIndex] = 0
-        board[self.destIndex] = 0
+        board[self.startIndex] = '0'
+        board[self.destIndex] = '0'
 
         current_vertex_index = vertex_table[self.destIndex][1]
         while current_vertex_index != self.startIndex:
-            board[current_vertex_index] = self.vertices[current_vertex_index].cost
+            board[current_vertex_index] = str(self.vertices[current_vertex_index].cost)
             current_vertex_index = vertex_table[current_vertex_index][1]
         
+        y = 0
         for i in range(len(board)):
-            print(board[i], end='')
             if (i+1)%self.n==0:
-                print()
+                board.insert(i+y+1, "\n")
+                y += 1
 
-        return(visited)
+        return visited, "".join(board)
 
 
 
@@ -109,25 +106,5 @@ class Vertice:
         self.down: tuple[int,int] = down
         self.left: tuple[int,int] = left
         self.right: tuple[int,int] = right
-        self.cost: int = cost
+        self.cost : int = cost
 
-elo = Graph()
-elo.ReadFile('plansza.txt')
-elo.FindPath()
-print()
-elo = Graph()
-elo.ReadFile('plansza1.txt')
-elo.FindPath()
-print()
-elo = Graph()
-elo.ReadFile('plansza2.txt')
-elo.FindPath()
-print()
-elo = Graph()
-elo.ReadFile('plansza3.txt')
-elo.FindPath()
-print()
-elo = Graph()
-elo.ReadFile('plansza5.txt')
-elo.FindPath()
-print(':)')
