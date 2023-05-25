@@ -1,7 +1,12 @@
+from copy import deepcopy
+from heapq import heappop, heappush
+import sys
+
 class Graph:
     def __init__(self):
         self.n: int = 0
         self.vertices: list[Vertice] = []
+        self.justVertices = []
         self.startIndex: int = None
         self.destIndex: int = None
 
@@ -13,13 +18,23 @@ class Graph:
             self.n = len(line.strip())
         n = self.n
         verticesTMP = list(map(int, verticesTMP))
+        vertices2 = dict()
         for i, ver in enumerate(verticesTMP):
-            if i < n*n-n: down = (i+n, verticesTMP[i+n])
-            else: down = None
-            if i >= n: up = (i-n, verticesTMP[i-n])
+            vertices2[i] = dict()
+            if i < n*n-n:
+                down = (i+n, verticesTMP[i+n])
+                vertices2[i][i+n] = verticesTMP[i+n]
+            else:
+                down = None
+
+            if i >= n:
+                up = (i-n, verticesTMP[i-n])
+                vertices2[i][i-n] = verticesTMP[i-n]
             else: up = None
             if i%n==0: left = None
-            else: left = (i-1, verticesTMP[i-1])
+            else:
+                left = (i-1, verticesTMP[i-1])
+                vertices2[i][i-1] = verticesTMP[i-1]
             if i%n==(n-1): right =None
             else: right = (i+1, verticesTMP[i+1])
             self.vertices.append(Vertice(up, down, left, right, ver))
@@ -95,6 +110,47 @@ class Graph:
         return visited, "".join(board)
 
 
+
+    def FindShortesPath2(self, start, dest):
+        distances = {vertex: [sys.maxsize, 0] for vertex in self.vertices}
+        distances[start] = [0,0]
+
+        queue = [(0, start)]
+        while queue: 
+            curDistance, curVertex = heappop(queue)
+            if curDistance > distances[curVertex][0]:
+                continue
+            if curVertex == dest: #jeśli szukamy z dokładnego end to start to wydajniej jest odkomentować tą część
+                break
+            for neighbor, cost in self.vertices[curVertex].items():
+                distance = curDistance + cost
+                if distance < distances[neighbor][0]:
+                    distances[neighbor] = [distance, curVertex]
+                    heappush(queue, (distance, neighbor))
+        path = []
+        while dest != start:
+            path.append(dest)
+            dest = distances[dest][1]
+        path.append(start)
+        return path
+
+    def PrintGraph(self):
+        dis = self.FindShortesPath2(self.startIndex, self.destIndex)
+        for i in range(self.n*self.n):
+            if i%self.n == 0:
+                print()
+            if i in dis:
+                print(self.justVertices[i], end ='')
+            else:
+                print('.', end='')
+        print()
+
+    def printNormal(self):
+        for i in range(self.n*self.n):
+            if i%self.n == 0:
+                print()
+            print(self.justVertices[i], end='')
+        print()
 
 class Vertice:
     '''
