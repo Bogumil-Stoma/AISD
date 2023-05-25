@@ -1,5 +1,5 @@
 from copy import deepcopy
-import heapq
+from heapq import heappop, heappush
 import sys
 
 class Graph:
@@ -197,26 +197,26 @@ class Graph:
 
 
 
-    def FindShortesPath2(self, start, end):
+    def FindShortesPath2(self, start, dest):
         distances = {vertex: [sys.maxsize, 0] for vertex in self.vertices}
         distances[start] = [0,0]
 
         queue = [(0, start)]
         while queue:
-            current_distance, current_vertex = heapq.heappop(queue)
-            if current_distance > distances[current_vertex][0]:
+            curDistance, curVertex = heappop(queue)
+            if curDistance > distances[curVertex][0]:
                 continue
-            if current_vertex == end:
+            if curVertex == dest:
                 break
-            for neighbor, weight in self.vertices[current_vertex].items():
-                distance = current_distance + weight
+            for neighbor, cost in self.vertices[curVertex].items():
+                distance = curDistance + cost
                 if distance < distances[neighbor][0]:
-                    distances[neighbor] = [distance, current_vertex]
-                    heapq.heappush(queue, (distance, neighbor))
+                    distances[neighbor] = [distance, curVertex]
+                    heappush(queue, (distance, neighbor))
         path = []
-        while end != start:
-            path.append(end)
-            end = distances[end][1]
+        while dest != start:
+            path.append(dest)
+            dest = distances[dest][1]
         path.append(start)
         return path
 
