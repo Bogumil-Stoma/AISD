@@ -206,7 +206,7 @@ class Graph:
             curDistance, curVertex = heappop(queue)
             if curDistance > distances[curVertex][0]:
                 continue
-            if curVertex == dest:
+            if curVertex == dest: #jeśli szukamy z dokładnego end to start to wydajniej jest odkomentować tą część
                 break
             for neighbor, cost in self.vertices[curVertex].items():
                 distance = curDistance + cost
